@@ -54,7 +54,7 @@ export const editorialFrames: EditorialFrameData[] = [
       { label: "Materiality", value: "ROMAN TRAVERTINE" },
     ],
     image: {
-      src: "/images/marine-house-entry.jpg",
+      src: "/images/marine-house-entry.webp",
       alt: "Arrival threshold and travertine portico with reflecting water court looking out to sea",
       objectPosition: "center center",
       caption: "The Marine House / Arrival Threshold",
@@ -77,7 +77,7 @@ export const editorialFrames: EditorialFrameData[] = [
       { label: "Orientation", value: "WEST COAST" },
     ],
     image: {
-      src: "/images/marine-house-hero.jpg",
+      src: "/images/marine-house-hero.webp",
       alt: "Monolithic architectural volumes and basalt water court reflecting evening skies",
       objectPosition: "center 55%",
       caption: "Architecture / Volumetric Dialogue",
@@ -101,7 +101,7 @@ export const editorialFrames: EditorialFrameData[] = [
       { label: "Glazing", value: "BRONZE PROFILES" },
     ],
     image: {
-      src: "/images/marine-house-living.jpg",
+      src: "/images/marine-house-living.webp",
       alt: "Double-height interior living volume with Roman travertine walls and reflection pool view",
       objectPosition: "center center",
       caption: "Living Sanctuary / 28 FT Travertine Volume",
@@ -125,7 +125,7 @@ export const editorialFrames: EditorialFrameData[] = [
       { label: "Surfaces", value: "HONED TRAVERTINE" },
     ],
     image: {
-      src: "/images/marine-house-dining.jpg",
+      src: "/images/marine-house-dining.webp",
       alt: "Minimalist basalt dining table and smoked oak joinery between flanking illuminated reflecting pools",
       objectPosition: "center center",
       caption: "Culinary Pavilion / Monolithic Basalt Island",
@@ -147,7 +147,7 @@ export const editorialFrames: EditorialFrameData[] = [
       { label: "Privacy", value: "UPPER SANCTUARY" },
     ],
     image: {
-      src: "/images/marine-house-suite.jpg",
+      src: "/images/marine-house-suite.webp",
       alt: "Quiet minimalist primary suite with low platform bed and sliding bronze glass framing ocean horizon",
       objectPosition: "center center",
       caption: "Upper Wing / Coastal Solitude",
@@ -169,7 +169,7 @@ export const editorialFrames: EditorialFrameData[] = [
       { label: "Terrace Area", value: "4,200 SQ FT" },
     ],
     image: {
-      src: "/images/marine-house-terrace.jpg",
+      src: "/images/marine-house-terrace.webp",
       alt: "Monolithic basalt terrace and infinity reflection pool merging with the Arabian sea",
       objectPosition: "center center",
       caption: "Ocean Terrace / Infinity Edge at Dusk",
@@ -191,7 +191,7 @@ export const editorialFrames: EditorialFrameData[] = [
     description: "",
     metadata: [],
     image: {
-      src: "/images/marine-house-terrace.jpg",
+      src: "/images/marine-house-terrace.webp",
       alt: "Minimalist dusk sky over the Arabian sea at the edge of the stone terrace",
       objectPosition: "center 85%",
     },

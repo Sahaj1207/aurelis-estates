@@ -1,5 +1,6 @@
 import React from "react";
 import { marineHouseContent } from "../../data/marineHouseContent";
+import { Img } from "../Img";
 
 export const MarineHouseHero: React.FC = () => {
   const { hero, meta } = marineHouseContent;
@@ -77,7 +78,7 @@ export const MarineHouseHero: React.FC = () => {
             data-hero-reveal="image-container"
             className="relative overflow-hidden bg-[#121517] aspect-[16/10] sm:aspect-[21/11] lg:aspect-[24/11] w-full border border-white/[0.08]"
           >
-            <img
+            <Img
               data-hero-reveal="image"
               src={hero.image}
               alt={hero.imageAlt}

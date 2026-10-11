@@ -1,5 +1,6 @@
 import React from "react";
 import type { AboutContentData } from "../../data/aboutContent";
+import { Img } from "../Img";
 
 interface AboutCurationProps {
   data: AboutContentData["curation"];
@@ -49,12 +50,11 @@ export const AboutCuration: React.FC<AboutCurationProps> = ({ data }) => {
             data-reveal="image-frame"
             className="relative overflow-hidden bg-[#121517] aspect-[16/10] sm:aspect-[21/9] border border-white/[0.08]"
           >
-            <img
+            <Img
               data-reveal="image"
               src={data.image}
               alt={data.imageAlt}
               className="absolute inset-0 h-full w-full object-cover object-center will-change-transform"
-              loading="lazy"
               decoding="async"
             />
 

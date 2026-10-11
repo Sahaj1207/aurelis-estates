@@ -1,5 +1,6 @@
 import React from "react";
 import type { JournalArticleData } from "../../data/journalArticlesData";
+import { Img } from "../Img";
 
 interface JournalArticleHeroProps {
   article: JournalArticleData;
@@ -49,7 +50,7 @@ export const JournalArticleHero: React.FC<JournalArticleHeroProps> = ({ article 
           {/* Right Dominant Architectural Plate Column */}
           <div className="lg:col-span-7 xl:col-span-7">
             <div className="article-hero-image-wrapper relative overflow-hidden bg-[#121517] aspect-[16/10] sm:aspect-[21/11] border border-white/[0.08] group">
-              <img
+              <Img
                 src={article.heroImage.src}
                 alt={article.heroImage.alt}
                 className="article-hero-image h-full w-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-[1.025]"

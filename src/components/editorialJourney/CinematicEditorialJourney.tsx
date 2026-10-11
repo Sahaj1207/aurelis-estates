@@ -7,84 +7,57 @@ import {
 } from "./editorialJourneyData";
 import { CinematicFrame } from "./CinematicFrame";
 import { JourneyProgress } from "./JourneyProgress";
+import { JourneyStack } from "./JourneyStack";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const CinematicEditorialJourney: React.FC = () => {
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+// The pinned stage needs a pointer-driven, landscape-sized viewport to read well
+const STAGE_QUERY = "(min-width: 1024px) and (min-height: 620px) and (pointer: fine)";
+
+function useMediaQuery(query: string): boolean {
+  const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
+
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const onChange = (e: MediaQueryListEvent) => setMatches(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, [query]);
+
+  return matches;
+}
+
+interface CinematicEditorialJourneyProps {
+  // Reports whether the pinned stage currently owns the viewport
+  onActiveChange?: (active: boolean) => void;
+}
+
+export const CinematicEditorialJourney: React.FC<CinematicEditorialJourneyProps> = ({
+  onActiveChange,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
-  const framesTrackRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLSpanElement>(null);
 
   const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(1);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean>(() =>
-    typeof window !== "undefined"
-      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      : false
-  );
-
-  // Detect prefers-reduced-motion changes
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const handleMediaChange = (e: MediaQueryListEvent) => {
-      setPrefersReducedMotion(e.matches);
-    };
-    mediaQuery.addEventListener("change", handleMediaChange);
-    return () => mediaQuery.removeEventListener("change", handleMediaChange);
-  }, []);
+  const prefersReducedMotion = useMediaQuery(REDUCED_MOTION_QUERY);
+  const stageCapable = useMediaQuery(STAGE_QUERY);
+  const pinned = stageCapable && !prefersReducedMotion;
 
   // GSAP ScrollTrigger Pinned Cinematic Sequence with intentional Arrival -> Hold -> Departure rhythm
   useEffect(() => {
-    if (
-      prefersReducedMotion ||
-      !containerRef.current ||
-      !viewportRef.current ||
-      !framesTrackRef.current
-    ) {
+    if (!pinned || !containerRef.current || !viewportRef.current) {
       return;
     }
 
     const ctx = gsap.context(() => {
-      // 1. Subtle Header Dimming while traversing monograph so navigation remains secondary
-      ScrollTrigger.create({
-        trigger: containerRef.current,
-        start: "top 25%",
-        end: "bottom 75%",
-        onEnter: () =>
-          gsap.to("#main-header", {
-            opacity: 0.35,
-            duration: 0.7,
-            ease: "power2.out",
-          }),
-        onLeave: () =>
-          gsap.to("#main-header", {
-            opacity: 1,
-            duration: 0.7,
-            ease: "power2.out",
-          }),
-        onEnterBack: () =>
-          gsap.to("#main-header", {
-            opacity: 0.35,
-            duration: 0.7,
-            ease: "power2.out",
-          }),
-        onLeaveBack: () =>
-          gsap.to("#main-header", {
-            opacity: 1,
-            duration: 0.7,
-            ease: "power2.out",
-          }),
-      });
-
       const frameElements = gsap.utils.toArray<HTMLElement>(".journey-frame-layer");
       const total = frameElements.length;
 
-      // Frame unit durations on the master timeline
-      // Each frame receives 7.5 timeline units:
-      // ~1.2s entry/reveal (16%)
-      // ~4.5s intentional HOLD and visual stillness (60%)
-      // ~1.8s gradual departure transition (24%)
-      const frameUnit = 7.5;
-      const totalTimelineDuration = total * frameUnit + 3.5;
+      // Each frame occupies 4 timeline units: ~1.4 arriving, the rest held still
+      const frameUnit = 4;
+      const exitHold = 1.2;
 
       // Initialize frame layer states
       frameElements.forEach((el, i) => {
@@ -97,22 +70,25 @@ export const CinematicEditorialJourney: React.FC = () => {
 
       let lastFrameIndex = 1;
 
-      // Master timeline with ScrollTrigger: 1100vh total physical scroll distance
       const masterTl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: () => `+=${Math.round(window.innerHeight * 11.0)}`,
+          // Roughly 0.85 viewport heights of travel per frame
+          end: () => `+=${Math.round(window.innerHeight * (total * 0.85 + 0.25))}`,
           pin: viewportRef.current,
           pinSpacing: true,
-          scrub: 0.6,
+          anticipatePin: 1,
+          scrub: 0.5,
+          invalidateOnRefresh: true,
+          onToggle: (self) => onActiveChange?.(self.isActive),
           onUpdate: (self) => {
+            if (progressRef.current) {
+              progressRef.current.style.transform = `scaleX(${self.progress})`;
+            }
             // Map progress to frame index without updating React state every frame
-            const normalized = Math.min(0.999, Math.max(0, self.progress));
-            const frameNum = Math.min(
-              total,
-              Math.floor(normalized * total) + 1
-            );
+            const position = self.progress * (total * frameUnit + exitHold);
+            const frameNum = Math.min(total, Math.floor(position / frameUnit) + 1);
             if (frameNum !== lastFrameIndex) {
               lastFrameIndex = frameNum;
               setCurrentFrameIndex(frameNum);
@@ -132,45 +108,13 @@ export const CinematicEditorialJourney: React.FC = () => {
         const meta = frameEl.querySelector(".cinematic-meta");
 
         if (i === 0) {
-          // Frame 01: Initial Arrival and Extended Hold
+          // Frame 01 is already composed when the stage pins; only the image breathes
           if (img) {
             masterTl.fromTo(
               img,
-              { scale: 1.025 },
-              { scale: 1.008, ease: "none", duration: frameUnit },
+              { scale: 1.06 },
+              { scale: 1.0, ease: "none", duration: frameUnit },
               0
-            );
-          }
-          if (eyebrow) {
-            masterTl.fromTo(
-              eyebrow,
-              { y: 10, opacity: 0.4 },
-              { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
-              0.1
-            );
-          }
-          if (headline) {
-            masterTl.fromTo(
-              headline,
-              { y: 18, opacity: 0.4 },
-              { y: 0, opacity: 1, duration: 1.0, ease: "power2.out" },
-              0.25
-            );
-          }
-          if (desc) {
-            masterTl.fromTo(
-              desc,
-              { y: 12, opacity: 0.3 },
-              { y: 0, opacity: 1, duration: 0.9, ease: "power2.out" },
-              0.45
-            );
-          }
-          if (meta) {
-            masterTl.fromTo(
-              meta,
-              { y: 8, opacity: 0.3 },
-              { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
-              0.6
             );
           }
           return;
@@ -179,33 +123,20 @@ export const CinematicEditorialJourney: React.FC = () => {
         const prevFrame = frameElements[i - 1];
         const prevCopy = prevFrame.querySelector(".cinematic-copy-wrapper");
 
-        // 1. DEPARTURE OF PREVIOUS FRAME COPY (Gentle 14px upward drift and fade)
+        // 1. DEPARTURE OF PREVIOUS FRAME COPY (Gentle upward drift and fade)
         if (prevCopy) {
           masterTl.to(
             prevCopy,
-            { y: -14, opacity: 0, ease: "power2.in", duration: 0.7 },
-            startTime
+            { y: -18, opacity: 0, ease: "power2.in", duration: 0.6 },
+            startTime - 0.25
           );
         }
 
         // 2. ARRIVAL TRANSITION OF CURRENT FRAME
         masterTl.set(frameEl, { visibility: "visible" }, startTime);
 
-        if (i === 1) {
-          // Frame 02: Sophisticated vertical clipPath reveal
-          masterTl.fromTo(
-            frameEl,
-            { clipPath: "inset(0 0 100% 0)", opacity: 1 },
-            {
-              clipPath: "inset(0 0 0% 0)",
-              opacity: 1,
-              ease: "power2.inOut",
-              duration: 1.2,
-            },
-            startTime
-          );
-        } else if (i === total - 1) {
-          // Frame 07 (Final Statement): Quiet fade out of previous and gentle fade in of statement
+        if (i === total - 1) {
+          // Final Statement: quiet fade out of previous and gentle fade in of statement
           masterTl.to(
             prevFrame,
             { opacity: 0, ease: "power2.inOut", duration: 1.2 },
@@ -213,123 +144,81 @@ export const CinematicEditorialJourney: React.FC = () => {
           );
           masterTl.fromTo(
             frameEl,
-            { opacity: 0, scale: 0.99 },
-            { opacity: 1, scale: 1.0, ease: "power2.out", duration: 1.4 },
-            startTime + 0.4
+            { opacity: 0, scale: 0.985 },
+            { opacity: 1, scale: 1.0, ease: "power2.out", duration: 1.3 },
+            startTime + 0.3
+          );
+        } else if (i % 2 === 1) {
+          // Odd frames wipe in from below over the outgoing frame
+          masterTl.fromTo(
+            frameEl,
+            { clipPath: "inset(100% 0% 0% 0%)", opacity: 1 },
+            {
+              clipPath: "inset(0% 0% 0% 0%)",
+              opacity: 1,
+              ease: "power2.inOut",
+              duration: 1.3,
+            },
+            startTime
           );
         } else {
-          // Frames 03 to 06: Cinematic soft cross-dissolve
+          // Even frames cross-dissolve
           masterTl.to(
             prevFrame,
-            { opacity: 0, ease: "power1.inOut", duration: 1.0 },
+            { opacity: 0, ease: "power1.inOut", duration: 1.1 },
             startTime
           );
           masterTl.fromTo(
             frameEl,
             { opacity: 0 },
-            { opacity: 1, ease: "power1.out", duration: 1.0 },
-            startTime + 0.2
+            { opacity: 1, ease: "power1.out", duration: 1.1 },
+            startTime + 0.15
           );
         }
 
         // Hide previous frame completely once transition finishes
-        masterTl.set(prevFrame, { visibility: "hidden" }, startTime + 1.4);
+        masterTl.set(prevFrame, { visibility: "hidden" }, startTime + 1.5);
 
-        // 3. DIRECTIONAL TEXT ARRIVAL (Subtle 8 to 18px translation and opacity reveal)
-        if (eyebrow) {
+        // 3. DIRECTIONAL TEXT ARRIVAL
+        const arrivals: [Element | null, number, number][] = [
+          [eyebrow, 12, 0.45],
+          [headline, 26, 0.55],
+          [subtitle, 14, 0.7],
+          [desc, 16, 0.8],
+          [meta, 10, 0.95],
+        ];
+        arrivals.forEach(([el, offset, at]) => {
+          if (!el) return;
           masterTl.fromTo(
-            eyebrow,
-            { y: 10, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.7, ease: "power2.out" },
-            startTime + 0.3
-          );
-        }
-        if (headline) {
-          masterTl.fromTo(
-            headline,
-            { y: 18, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.9, ease: "power2.out" },
-            startTime + 0.45
-          );
-        }
-        if (subtitle) {
-          masterTl.fromTo(
-            subtitle,
-            { y: 12, opacity: 0 },
+            el,
+            { y: offset, opacity: 0 },
             { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
-            startTime + 0.6
+            startTime + at
           );
-        }
-        if (desc) {
-          masterTl.fromTo(
-            desc,
-            { y: 14, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
-            startTime + 0.75
-          );
-        }
-        if (meta) {
-          masterTl.fromTo(
-            meta,
-            { y: 8, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.7, ease: "power2.out" },
-            startTime + 0.9
-          );
-        }
+        });
 
-        // 4. INTENTIONAL HOLD AND SUBTLE IMAGE DRIFT (Visual stillness: almost still, but alive)
+        // 4. HOLD: the image keeps settling so the frame is almost still, but alive
         if (img && i !== total - 1) {
           masterTl.fromTo(
             img,
-            { scale: 1.025 },
-            { scale: 1.008, ease: "none", duration: frameUnit - 1.2 },
-            startTime + 1.2
+            { scale: 1.08 },
+            { scale: 1.0, ease: "none", duration: frameUnit },
+            startTime
           );
         }
       });
 
-      // 5. SECTION EXIT BUFFER: Generous hold on final statement before releasing pin
-      masterTl.to({}, { duration: 3.5 }, totalTimelineDuration - 3.5);
+      // 5. SECTION EXIT BUFFER: hold on final statement before releasing pin
+      masterTl.to({}, { duration: exitHold }, total * frameUnit);
     }, containerRef);
 
-    return () => ctx.revert();
-  }, [prefersReducedMotion]);
-
-  // Accessible Fallback for Reduced Motion Preference
-  if (prefersReducedMotion) {
-    return (
-      <section
-        id="experience"
-        aria-label="The Marine House Editorial Experience"
-        className="relative z-20 bg-[#0a0c0d] px-6 sm:px-8 md:px-12 lg:px-16 py-28 border-t border-white/[0.06]"
-      >
-        <div className="mx-auto max-w-[1720px]">
-          {/* Section Chapter Title */}
-          <div className="border-b border-white/[0.07] pb-10 mb-16">
-            <span className="text-[10px] md:text-[11px] font-medium tracking-[0.32em] uppercase text-[#dfd7c6] font-sans block mb-3.5">
-              {editorialJourneyIntro.sectionNumber}
-            </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-light font-serif text-[#f6f6f4] tracking-[-0.015em] leading-[1.02] mb-4">
-              <span className="block">{editorialJourneyIntro.headline.line1}</span>
-              <span className="block text-[#dfd7c6]">{editorialJourneyIntro.headline.line2}</span>
-            </h2>
-            <p className="text-[14px] font-light leading-relaxed text-[#c8c2b5]/90 max-w-xl font-sans">
-              {editorialJourneyIntro.supportingCopy}
-            </p>
-          </div>
-
-          {/* Linear Vertical Editorial Sequence */}
-          <div className="flex flex-col gap-28">
-            {editorialFrames.map((frame) => (
-              <div key={frame.id} className="min-h-[75vh]">
-                <CinematicFrame frame={frame} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
+    return () => {
+      ctx.revert();
+      onActiveChange?.(false);
+    };
+    // onActiveChange is a state setter owned by the page
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pinned]);
 
   return (
     <section
@@ -337,73 +226,82 @@ export const CinematicEditorialJourney: React.FC = () => {
       aria-label="The Marine House Cinematic Editorial Experience"
       className="relative z-20 bg-[#0a0c0d] border-t border-white/[0.06]"
     >
-      {/* 1. Chapter Opening Title Spread (Vertical breathing room before pinned sequence) */}
-      <div className="mx-auto max-w-[1720px] px-6 sm:px-8 md:px-12 lg:px-16 pt-24 md:pt-36 lg:pt-44 pb-16 md:pb-24 border-b border-white/[0.07]">
+      {/* 1. Chapter Opening Title Spread */}
+      <div className="mx-auto max-w-[1720px] px-6 sm:px-8 md:px-12 lg:px-16 pt-20 md:pt-32 lg:pt-36 pb-14 md:pb-20">
         <span className="text-[10px] md:text-[11px] font-medium tracking-[0.32em] uppercase text-[#dfd7c6] font-sans block mb-4">
           {editorialJourneyIntro.sectionNumber}
         </span>
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-light font-serif text-[#f6f6f4] tracking-[-0.015em] leading-[0.98]">
+          <h2 className="display-lg font-light font-serif text-[#f6f6f4] tracking-[-0.015em] leading-[0.98]">
             <span className="block">{editorialJourneyIntro.headline.line1}</span>
             <span className="block text-[#dfd7c6]">{editorialJourneyIntro.headline.line2}</span>
           </h2>
-          <p className="max-w-[36ch] text-[13.5px] md:text-[14.5px] font-light leading-[1.7] text-[#c8c2b5]/90 font-sans pb-1">
+          <p className="max-w-[36ch] text-[14px] md:text-[15px] font-light leading-[1.7] text-[#c8c2b5]/90 font-sans pb-1">
             {editorialJourneyIntro.supportingCopy}
           </p>
         </div>
       </div>
 
-      {/* 2. Pinned Viewport Container (1100vh slow controlled journey) */}
-      <div ref={containerRef} className="relative w-full">
-        <div
-          ref={viewportRef}
-          className="relative h-[100dvh] w-full overflow-hidden bg-[#0a0c0d]"
-        >
-          {/* Top Quiet Index Indicator */}
-          <div className="absolute top-0 inset-x-0 z-30 flex items-center justify-between p-6 sm:p-8 md:p-12 lg:p-14 pointer-events-none">
-            <div className="flex items-center gap-3">
-              <span className="text-[10px] md:text-[10.5px] font-medium tracking-[0.3em] uppercase text-[#dfd7c6] font-sans">
-                THE EXPERIENCE
-              </span>
-              <span className="hidden sm:inline-block text-[9.5px] tracking-[0.24em] uppercase text-[#c8c2b5]/40 font-sans">
-                Monograph Sequence
-              </span>
-            </div>
+      {pinned ? (
+        /* 2a. Pinned stage: frames exchange in place while the page scrolls beneath */
+        <div ref={containerRef} className="relative w-full">
+          <div
+            ref={viewportRef}
+            className="relative h-[100svh] w-full overflow-hidden bg-[#0a0c0d]"
+          >
+            {/* Top Quiet Index Indicator */}
+            <div className="absolute top-0 inset-x-0 z-30 flex items-start justify-between px-16 pt-10 pointer-events-none">
+              <div className="flex items-center gap-3">
+                <span className="text-[10.5px] font-medium tracking-[0.3em] uppercase text-[#dfd7c6] font-sans">
+                  THE EXPERIENCE
+                </span>
+                <span className="text-[9.5px] tracking-[0.24em] uppercase text-[#c8c2b5]/45 font-sans">
+                  Monograph Sequence
+                </span>
+              </div>
 
-            <div className="pointer-events-auto">
               <JourneyProgress
                 currentFrame={currentFrameIndex}
                 totalFrames={editorialFrames.length}
               />
             </div>
-          </div>
 
-          {/* Stacked Cinematic Frames Track */}
-          <div ref={framesTrackRef} className="relative h-full w-full">
-            {editorialFrames.map((frame, index) => (
-              <div
-                key={frame.id}
-                className="journey-frame-layer absolute inset-0 h-full w-full"
-              >
-                <CinematicFrame
-                  frame={frame}
-                  isActive={currentFrameIndex === index + 1}
-                />
-              </div>
-            ))}
-          </div>
-
-          {/* Bottom Architectural Footnote */}
-          <div className="absolute bottom-0 inset-x-0 z-30 flex items-end justify-between p-6 sm:p-8 md:p-12 lg:p-14 pointer-events-none">
-            <div className="text-[9.5px] tracking-[0.24em] uppercase text-[#c8c2b5]/40 font-sans">
-              Scroll downward to traverse architecture
+            {/* Stacked Cinematic Frames Track */}
+            <div data-gallery className="relative h-full w-full">
+              {editorialFrames.map((frame, index) => (
+                <div
+                  key={frame.id}
+                  aria-hidden={currentFrameIndex !== index + 1}
+                  className="journey-frame-layer absolute inset-0 h-full w-full bg-[#0a0c0d] will-change-[opacity,clip-path]"
+                >
+                  <CinematicFrame frame={frame} />
+                </div>
+              ))}
             </div>
-            <div className="hidden sm:block text-[9.5px] tracking-[0.24em] uppercase text-[#c8c2b5]/35 font-sans">
-              The Marine House / Private Edition
+
+            {/* Bottom Architectural Footnote & Scrubbed Progress Rule */}
+            <div className="absolute bottom-0 inset-x-0 z-30 px-16 pb-9 pointer-events-none">
+              <div className="flex items-end justify-between pb-4">
+                <span className="text-[9.5px] tracking-[0.24em] uppercase text-[#c8c2b5]/45 font-sans">
+                  Scroll to move through the house
+                </span>
+                <span className="text-[9.5px] tracking-[0.24em] uppercase text-[#c8c2b5]/40 font-sans">
+                  The Marine House / Private Edition
+                </span>
+              </div>
+              <span className="block h-px w-full bg-white/10">
+                <span
+                  ref={progressRef}
+                  className="block h-full w-full origin-left scale-x-0 bg-[#dfd7c6]/80"
+                />
+              </span>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        /* 2b. Touch, compact and reduced-motion presentation */
+        <JourneyStack animate={!prefersReducedMotion} />
+      )}
     </section>
   );
 };

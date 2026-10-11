@@ -1,5 +1,6 @@
 import React from "react";
 import { approachContent } from "./approachData";
+import { Img } from "../Img";
 
 export const ApproachEnding: React.FC = () => {
   const { ending } = approachContent;
@@ -31,11 +32,10 @@ export const ApproachEnding: React.FC = () => {
         {/* Quiet Architectural Finishing Fragment Right */}
         <div className="lg:col-span-5 xl:col-span-5 flex justify-start lg:justify-end">
           <div className="approach-ending-image-wrapper relative overflow-hidden bg-[#121517] aspect-[16/10] border border-white/[0.08] max-w-sm sm:max-w-md w-full group">
-            <img
+            <Img
               src={ending.image.src}
               alt={ending.image.alt}
               className="approach-ending-image h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.025]"
-              loading="lazy"
             />
             <div className="absolute bottom-3 left-3 bg-[#0a0c0d]/85 backdrop-blur-md px-3 py-1.5 border border-white/[0.08] text-[8.5px] tracking-[0.22em] uppercase text-[#c8c2b5]/80 pointer-events-none">
               {ending.image.caption}

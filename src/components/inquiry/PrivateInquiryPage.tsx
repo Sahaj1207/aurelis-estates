@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowUpRight } from "@phosphor-icons/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { scrollToTarget } from "../../services/smoothScroll";
+import { Img } from "../Img";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -170,7 +171,7 @@ export const PrivateInquiryPage: React.FC<PrivateInquiryPageProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 sm:gap-16 lg:gap-16 xl:gap-24 items-start">
             {/* Left Column: Heading, Narrative, Protocol, and Action */}
             <div className="lg:col-span-6 flex flex-col items-start">
-              <h1 className="inquiry-page-headline text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] font-light font-serif tracking-[-0.015em] leading-[1.08] text-[#f6f6f4] mb-8 sm:mb-12">
+              <h1 className="inquiry-page-headline display-lg font-light font-serif tracking-[-0.015em] leading-[1.08] text-[#f6f6f4] mb-8 sm:mb-12">
                 A PRIVATE CONVERSATION BEGINS HERE.
               </h1>
 
@@ -224,9 +225,9 @@ export const PrivateInquiryPage: React.FC<PrivateInquiryPageProps> = ({
             <div className="lg:col-span-6 flex flex-col items-end">
               <div className="w-full lg:max-w-[95%] xl:max-w-[90%]">
                 <div className="inquiry-page-image-wrapper relative overflow-hidden bg-[#141719] aspect-[4/3] sm:aspect-[16/11]">
-                  <img
+                  <Img
                     ref={imageRef}
-                    src="/images/marine-house-terrace.jpg"
+                    src="/images/marine-house-terrace.webp"
                     alt="Twilight reflection pool and travertine architecture of contemporary private residence"
                     className="w-full h-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.025]"
                   />

@@ -114,7 +114,7 @@ export const aboutContent: AboutContentData = {
     headlineLines: ["A SMALLER NUMBER", "OF EXCEPTIONAL PLACES."],
     paragraph:
       "We do not build a catalogue for its own sake. The AURELIS collection is deliberately selective, bringing together residences whose architecture, setting, and atmosphere deserve closer attention.",
-    image: "/images/marine-house-entry.jpg",
+    image: "/images/marine-house-entry.webp",
     imageAlt:
       "Monolithic stone entry courtyard with sheltered architectural portal and reflecting pool",
     caption: "PLATE I / MONOLITHIC MASSING AND SHELTERED ENTRANCE",

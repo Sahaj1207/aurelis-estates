@@ -1,5 +1,6 @@
 import React from "react";
 import { approachContent } from "./approachData";
+import { Img } from "../Img";
 
 export const ApproachPrinciples: React.FC = () => {
   const { principles } = approachContent;
@@ -27,11 +28,10 @@ export const ApproachPrinciples: React.FC = () => {
                       <div
                         className={`approach-principle-image-wrapper relative overflow-hidden bg-[#121517] ${principle.image.aspectRatio} border border-white/[0.08] max-w-lg group`}
                       >
-                        <img
+                        <Img
                           src={principle.image.src}
                           alt={principle.image.alt}
                           className="approach-principle-image h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.025]"
-                          loading="lazy"
                         />
                         <div className="absolute bottom-3 left-3 bg-[#0a0c0d]/85 backdrop-blur-md px-3 py-1.5 border border-white/[0.08] text-[8.5px] tracking-[0.22em] uppercase text-[#c8c2b5]/80 pointer-events-none">
                           {principle.image.caption}
@@ -82,11 +82,10 @@ export const ApproachPrinciples: React.FC = () => {
                       <div
                         className={`approach-principle-image-wrapper relative overflow-hidden bg-[#121517] ${principle.image.aspectRatio} border border-white/[0.08] max-w-lg group`}
                       >
-                        <img
+                        <Img
                           src={principle.image.src}
                           alt={principle.image.alt}
                           className="approach-principle-image h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.025]"
-                          loading="lazy"
                         />
                         <div className="absolute bottom-3 left-3 bg-[#0a0c0d]/85 backdrop-blur-md px-3 py-1.5 border border-white/[0.08] text-[8.5px] tracking-[0.22em] uppercase text-[#c8c2b5]/80 pointer-events-none">
                           {principle.image.caption}

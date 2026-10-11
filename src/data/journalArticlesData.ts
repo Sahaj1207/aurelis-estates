@@ -54,7 +54,7 @@ export const monolithicStoneArticle: JournalArticleData = {
   intro:
     "How mass, proportion, and natural material can give contemporary architecture a sense of permanence.",
   heroImage: {
-    src: "/images/the-desert-court.jpg",
+    src: "/images/the-desert-court.webp",
     alt: "Monolithic stone architectural volumes in dialogue with natural desert light",
     caption: "MATERIAL STUDY / MONOLITHIC MASSING & SHADOW",
   },
@@ -66,7 +66,7 @@ export const monolithicStoneArticle: JournalArticleData = {
       "For AURELIS, material is never simply a finish. It is part of the architecture's identity.",
     ],
     image: {
-      src: "/images/marine-house-dining.jpg",
+      src: "/images/marine-house-dining.webp",
       alt: "Honed Roman travertine, bronze joinery, and water reflection basin",
       caption: "MATERIAL STUDY / ROMAN TRAVERTINE & WATER",
       aspectRatio: "aspect-[4/3]",
@@ -83,7 +83,7 @@ export const monolithicStoneArticle: JournalArticleData = {
       "Monolithic forms establish rhythm, shadow, and permanence. Their weight gives the surrounding landscape something against which to be understood.",
     ],
     image: {
-      src: "/images/the-cliff-residence.jpg",
+      src: "/images/the-cliff-residence.webp",
       alt: "Monolithic coastal residence embedded into rugged rock face",
       caption: "LIGHT & MASS / MONOLITHIC PROPORTION",
       aspectRatio: "aspect-[16/10]",
@@ -99,7 +99,7 @@ export const monolithicStoneArticle: JournalArticleData = {
       "A residence becomes more personal when its materials are allowed to belong to time rather than resist it.",
     ],
     image: {
-      src: "/images/marine-house-entry.jpg",
+      src: "/images/marine-house-entry.webp",
       alt: "Textured travertine entrance court and monolithic stone portals",
       caption: "SURFACE / NATURAL WEATHERING & TEXTURE",
       aspectRatio: "aspect-[4/3]",
@@ -115,7 +115,7 @@ export const monolithicStoneArticle: JournalArticleData = {
       "It is a place designed to remain.",
     ],
     image: {
-      src: "/images/marine-house-hero.jpg",
+      src: "/images/marine-house-hero.webp",
       alt: "Cantilevered stone pavilions and calm water reflection at sunset",
       caption: "ARCHITECTURAL TIME / CONTINUITY & SETTING",
       aspectRatio: "aspect-[21/9]",
@@ -133,7 +133,7 @@ export const monolithicStoneArticle: JournalArticleData = {
     category: "02 / PLACE",
     titleLines: ["WHEN A HOUSE BECOMES", "PART OF THE LANDSCAPE."],
     slug: "when-a-house-becomes-part-of-the-landscape",
-    image: "/images/the-cliff-residence.jpg",
+    image: "/images/the-cliff-residence.webp",
   },
 };
 
@@ -148,7 +148,7 @@ export const landscapeArticle: JournalArticleData = {
   intro:
     "Architecture that begins with terrain rather than sitting on top of it.",
   heroImage: {
-    src: "/images/the-cliff-residence.jpg",
+    src: "/images/the-cliff-residence.webp",
     alt: "Coastal residence embedded seamlessly into rugged maritime cliff",
     caption: "TOPOGRAPHY STUDY / COASTAL EMBEDMENT",
   },
@@ -160,7 +160,7 @@ export const landscapeArticle: JournalArticleData = {
       "At AURELIS, topography is considered the first building block of any private estate.",
     ],
     image: {
-      src: "/images/the-garden-house.jpg",
+      src: "/images/the-garden-house.webp",
       alt: "Pavilion resting gently in native coastal vegetation",
       caption: "SITE SURVEY / PROTECTED FLORA & ELEVATION",
       aspectRatio: "aspect-[16/10]",
@@ -176,7 +176,7 @@ export const landscapeArticle: JournalArticleData = {
       "The line between natural ground and crafted terrace dissolves.",
     ],
     image: {
-      src: "/images/marine-house-terrace.jpg",
+      src: "/images/marine-house-terrace.webp",
       alt: "Stone terrace overlooking open ocean horizon",
       caption: "HORIZON ALIGNMENT / STEPPED TERRACES",
       aspectRatio: "aspect-[16/10]",
@@ -190,7 +190,7 @@ export const landscapeArticle: JournalArticleData = {
       "Over seasons, the boundary between wilderness and cultivation softens entirely.",
     ],
     image: {
-      src: "/images/marine-house-dining.jpg",
+      src: "/images/marine-house-dining.webp",
       alt: "Gardens and reflection basins enveloping stone architecture",
       caption: "BOTANICAL HARMONY / INDIGENOUS SPECIES",
       aspectRatio: "aspect-[4/3]",
@@ -204,7 +204,7 @@ export const landscapeArticle: JournalArticleData = {
       "This is the standard of living we champion: architecture that is inseparable from place.",
     ],
     image: {
-      src: "/images/the-desert-court.jpg",
+      src: "/images/the-desert-court.webp",
       alt: "Desert pavilion in harmony with earth and sky",
       caption: "TERRITORIAL HARMONY / MONOLITHIC SANCTUARY",
       aspectRatio: "aspect-[21/9]",
@@ -222,7 +222,7 @@ export const landscapeArticle: JournalArticleData = {
     category: "03 / MATERIAL",
     titleLines: ["THE PATINA", "OF TIME."],
     slug: "the-patina-of-time",
-    image: "/images/marine-house-dining.jpg",
+    image: "/images/marine-house-dining.webp",
   },
 };
 
@@ -237,7 +237,7 @@ export const patinaOfTimeArticle: JournalArticleData = {
   intro:
     "Why natural materials become more compelling as they age.",
   heroImage: {
-    src: "/images/marine-house-dining.jpg",
+    src: "/images/marine-house-dining.webp",
     alt: "Honed Roman travertine, bronze joinery, and water reflection basin",
     caption: "MATERIAL STUDY / HONED TRAVERTINE & BASALT",
   },
@@ -250,7 +250,7 @@ export const patinaOfTimeArticle: JournalArticleData = {
       "They are evidence that the architecture is being lived in.",
     ],
     image: {
-      src: "/images/the-desert-court.jpg",
+      src: "/images/the-desert-court.webp",
       alt: "Travertine massing and sunlight shadow study",
       caption: "MATERIAL STUDY / SURFACE & TIME",
       aspectRatio: "aspect-[4/3]",
@@ -267,7 +267,7 @@ export const patinaOfTimeArticle: JournalArticleData = {
       "Architecture becomes more human when material is allowed to remain material.",
     ],
     image: {
-      src: "/images/marine-house-entry.jpg",
+      src: "/images/marine-house-entry.webp",
       alt: "Textured travertine entrance court and monolithic stone portals",
       caption: "NATURAL MATERIAL / VARIATION & CHARACTER",
       aspectRatio: "aspect-[16/10]",
@@ -282,7 +282,7 @@ export const patinaOfTimeArticle: JournalArticleData = {
       "This is architecture designed with time in mind.",
     ],
     image: {
-      src: "/images/marine-house-suite.jpg",
+      src: "/images/marine-house-suite.webp",
       alt: "Private sanctum with natural timber slats and stone surfaces",
       caption: "WEATHERED TEXTURE / AGED TIMBER & STONE",
       aspectRatio: "aspect-[4/3]",
@@ -298,7 +298,7 @@ export const patinaOfTimeArticle: JournalArticleData = {
       "It becomes more itself.",
     ],
     image: {
-      src: "/images/the-cliff-residence.jpg",
+      src: "/images/the-cliff-residence.webp",
       alt: "Monolithic stone residence enduring against coastal elements",
       caption: "WEATHERED MASS / PERMANENCE ACROSS TIME",
       aspectRatio: "aspect-[21/9]",
@@ -323,7 +323,7 @@ export const patinaOfTimeArticle: JournalArticleData = {
       "OF DAYLIGHT.",
     ],
     slug: "designing-for-the-last-hour-of-daylight",
-    image: "/images/marine-house-hero.jpg",
+    image: "/images/marine-house-hero.webp",
   },
 };
 
@@ -338,7 +338,7 @@ export const lastHourDaylightArticle: JournalArticleData = {
   intro:
     "How changing light can become part of the architecture itself.",
   heroImage: {
-    src: "/images/marine-house-hero.jpg",
+    src: "/images/marine-house-hero.webp",
     alt: "Cantilevered stone pavilions glowing under the final coastal dusk light",
     caption: "DUSK APERTURE / GOLDEN HOUR REFLECTION",
   },
@@ -351,7 +351,7 @@ export const lastHourDaylightArticle: JournalArticleData = {
       "It is part of the architecture.",
     ],
     image: {
-      src: "/images/marine-house-living.jpg",
+      src: "/images/marine-house-living.webp",
       alt: "Double-height interior volume illuminated by shifting sea light",
       caption: "DIURNAL STUDY / MOVEMENT OF LIGHT",
       aspectRatio: "aspect-[16/10]",
@@ -368,7 +368,7 @@ export const lastHourDaylightArticle: JournalArticleData = {
       "It makes room for it.",
     ],
     image: {
-      src: "/images/marine-house-terrace.jpg",
+      src: "/images/marine-house-terrace.webp",
       alt: "Terrace and reflection basin holding the fading sky light at dusk",
       caption: "DUSK HORIZON / REFLECTION & SHADOW",
       aspectRatio: "aspect-[16/10]",
@@ -383,7 +383,7 @@ export const lastHourDaylightArticle: JournalArticleData = {
       "The best interiors are designed to receive these changes rather than remain visually fixed.",
     ],
     image: {
-      src: "/images/the-desert-court.jpg",
+      src: "/images/the-desert-court.webp",
       alt: "Sunlight and dramatic shadow geometry across honed stone wall",
       caption: "ILLUMINATION AXIS / STONE & SHADOW",
       aspectRatio: "aspect-[4/3]",
@@ -399,7 +399,7 @@ export const lastHourDaylightArticle: JournalArticleData = {
       "A residence should have a different presence at dusk than it does at noon.",
     ],
     image: {
-      src: "/images/the-garden-house.jpg",
+      src: "/images/the-garden-house.webp",
       alt: "Quiet stone pavilion resting in soft evening garden atmosphere",
       caption: "EVENING HORIZON / ILLUMINATION & RESTRAINT",
       aspectRatio: "aspect-[21/9]",
@@ -421,7 +421,7 @@ export const lastHourDaylightArticle: JournalArticleData = {
     category: "01 / ARCHITECTURE",
     titleLines: ["THE QUIET POWER OF", "MONOLITHIC STONE."],
     slug: "quiet-power-of-monolithic-stone",
-    image: "/images/the-desert-court.jpg",
+    image: "/images/the-desert-court.webp",
   },
 };
 

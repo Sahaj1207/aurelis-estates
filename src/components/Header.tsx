@@ -3,6 +3,7 @@ import { List, ArrowUpRight } from "@phosphor-icons/react";
 import { Navigation } from "./Navigation";
 import type { NavItem } from "../data/estateContent";
 import { scrollToTarget } from "../services/smoothScroll";
+import { useMagnetic } from "../hooks/useMagnetic";
 
 interface HeaderProps {
   brand: string;
@@ -12,6 +13,7 @@ interface HeaderProps {
     href: string;
   };
   isScrolled?: boolean;
+  isHidden?: boolean;
   onNavigate?: (path: string) => void;
 }
 
@@ -20,9 +22,11 @@ export const Header: React.FC<HeaderProps> = ({
   navItems,
   primaryAction,
   isScrolled = false,
+  isHidden = false,
   onNavigate,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const inquiryRef = useMagnetic<HTMLAnchorElement>(0.22);
 
   const handleBrandClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -51,13 +55,15 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header
       id="main-header"
-      className={`fixed top-0 left-0 right-0 z-40 w-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-        isScrolled
-          ? "header-glass py-3 md:py-3.5"
-          : "bg-transparent py-7 md:py-8 lg:py-9"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-40 w-full pt-[env(safe-area-inset-top,0px)] transition-[transform,background-color,border-color] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        isScrolled ? "header-glass" : "border-b border-transparent bg-transparent"
+      } ${isHidden && !mobileMenuOpen ? "-translate-y-full" : "translate-y-0"}`}
     >
-      <div className="mx-auto flex max-w-[1720px] items-center justify-between px-6 sm:px-8 md:px-12 lg:px-16">
+      <div
+        className={`header-inner mx-auto flex max-w-[1720px] items-center justify-between px-6 sm:px-8 md:px-12 lg:px-16 transition-[padding] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isScrolled ? "py-3 md:py-3.5" : "py-6 md:py-8 lg:py-9"
+        }`}
+      >
         {/* Brand Anchor */}
         <a
           href="#"
@@ -92,9 +98,10 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Right Actions: Private Inquiry & Mobile Trigger */}
         <div className="flex items-center gap-3 sm:gap-4">
           <a
+            ref={inquiryRef}
             href={primaryAction.href}
             onClick={handlePrimaryActionClick}
-            className={`hidden sm:inline-flex items-center gap-2 border uppercase text-[#f6f6f4] transition-all duration-300 hover:border-[#dfd7c6] hover:bg-[#dfd7c6] hover:text-[#0a0c0d] focus:outline-none focus-visible:ring-1 focus-visible:ring-[#dfd7c6] active:scale-[0.98] ${
+            className={`hidden sm:inline-flex items-center gap-2 border uppercase text-[#f6f6f4] transition-[color,background-color,border-color,scale,padding] duration-300 hover:border-[#dfd7c6] hover:bg-[#dfd7c6] hover:text-[#0a0c0d] focus:outline-none focus-visible:ring-1 focus-visible:ring-[#dfd7c6] active:scale-[0.98] ${
               isScrolled
                 ? "border-white/12 bg-white/[0.02] px-3.5 py-1.5 text-[10px] tracking-[0.22em]"
                 : "border-white/20 bg-white/5 px-4 py-2 text-[10.5px] tracking-[0.2em] backdrop-blur-sm"
@@ -110,7 +117,7 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={() => setMobileMenuOpen(true)}
             aria-label="Open navigation menu"
             aria-expanded={mobileMenuOpen}
-            className="flex md:hidden h-9 w-9 items-center justify-center border border-white/15 bg-[#0a0c0d]/60 text-[#f6f6f4] backdrop-blur-md transition-colors hover:border-[#dfd7c6] focus:outline-none focus-visible:ring-1 focus-visible:ring-[#dfd7c6]"
+            className="flex md:hidden h-11 w-11 items-center justify-center border border-white/15 bg-[#0a0c0d]/60 text-[#f6f6f4] backdrop-blur-md transition-colors hover:border-[#dfd7c6] focus:outline-none focus-visible:ring-1 focus-visible:ring-[#dfd7c6]"
           >
             <List size={18} weight="regular" />
           </button>

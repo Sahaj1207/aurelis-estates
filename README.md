@@ -1,32 +1,45 @@
-# React + TypeScript + Vite
+# AURELIS Estates
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A concept site for a private residential portfolio: a cinematic homepage, a flagship
+residence monograph, a journal, an about page and a private inquiry page.
 
-Currently, two official plugins are available:
+Built with React 19, TypeScript, Vite, Tailwind CSS v4, GSAP ScrollTrigger and Lenis.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Develop
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Build
+
+```bash
+npm run build
+npm run preview
+```
+
+## Images
+
+Photograph masters live in `source-images/`. The site serves responsive WebP
+renditions from `public/images/`, generated with:
+
+```bash
+npm run images
+```
+
+Add or replace a master, run the script, and reference the result as
+`/images/<name>.webp` — the `Img` component adds the 800w rendition automatically.
+
+## Structure
+
+- `src/App.tsx` — route shell, intro curtain and cross-route transition
+- `src/pages/HomePage.tsx` — homepage composition
+- `src/components/*` — one folder per section or route
+- `src/services/smoothScroll.ts` — Lenis + ScrollTrigger wiring and scroll locking
+- `src/data/*` — all copy and content
+
+## Deploy
+
+Deployed on Vercel. `vercel.json` rewrites every path to `index.html` so deep links
+such as `/about` or `/residences/the-marine-house` resolve on a hard refresh.

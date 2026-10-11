@@ -108,7 +108,7 @@ export const marineHouseContent: MarineHouseData = {
     titleLine2: "HOUSE",
     area: "8,420 SQ FT",
     status: "PRIVATE ACQUISITION",
-    image: "/images/marine-house-hero.jpg",
+    image: "/images/marine-house-hero.webp",
     imageAlt: "The Marine House coastal architecture with cantilevered stone volumes and calm water reflection",
   },
   residence: {
@@ -116,7 +116,7 @@ export const marineHouseContent: MarineHouseData = {
     headlineLines: ["ARCHITECTURE", "IN DIALOGUE", "WITH THE SEA."],
     paragraph:
       "The Marine House is conceived as a sequence of sheltered volumes, open terraces, and framed views, allowing the changing light of the coast to become part of everyday life.",
-    image: "/images/marine-house-entry.jpg",
+    image: "/images/marine-house-entry.webp",
     imageAlt: "Sheltered entry court and monolithic travertine portals at The Marine House",
     caption: "EASTERN ACCESS COURTYARD / MONOLITHIC MASSING",
   },
@@ -125,7 +125,7 @@ export const marineHouseContent: MarineHouseData = {
     headlineLines: ["STONE.", "GLASS.", "WATER.", "LIGHT."],
     paragraph:
       "Roman travertine anchors the residence while bronze-framed glazing and water create a continuous relationship between interior and landscape.",
-    image: "/images/marine-house-dining.jpg",
+    image: "/images/marine-house-dining.webp",
     imageAlt: "Tactile travertine surfaces and bronze framed glass overlooking sea garden",
     materials: [
       {
@@ -155,7 +155,7 @@ export const marineHouseContent: MarineHouseData = {
     headlineLines: ["A QUIET", "INTERIOR", "LANDSCAPE."],
     paragraph:
       "Double-height living spaces open toward the garden and sea, bringing natural light deep into the residence while maintaining a sense of privacy.",
-    image: "/images/marine-house-living.jpg",
+    image: "/images/marine-house-living.webp",
     imageAlt: "Double-height interior volume with timber ceilings and panoramic sea views",
     specs: [
       { label: "CEILING CLEARANCE", value: "6.2 METERS" },
@@ -175,7 +175,7 @@ export const marineHouseContent: MarineHouseData = {
         name: "LIVING VOLUME",
         description:
           "Expansive double-height pavilion framed by floor-to-ceiling glass and reflection pools.",
-        image: "/images/marine-house-living.jpg",
+        image: "/images/marine-house-living.webp",
         aspect: "6.2M HEIGHT / SEAWARD ORIENTATION",
       },
       {
@@ -184,7 +184,7 @@ export const marineHouseContent: MarineHouseData = {
         name: "DINING CANTILEVER",
         description:
           "Suspended glass pavilion hovering over reflecting water with direct sunset alignments.",
-        image: "/images/marine-house-dining.jpg",
+        image: "/images/marine-house-dining.webp",
         aspect: "CANTILEVERED WATER LEVEL / SEATING FOR 14",
       },
       {
@@ -193,7 +193,7 @@ export const marineHouseContent: MarineHouseData = {
         name: "PRIMARY SUITE",
         description:
           "Upper-level private sanctum offering unobstructed ocean vistas and secluded terrace access.",
-        image: "/images/marine-house-suite.jpg",
+        image: "/images/marine-house-suite.webp",
         aspect: "UPPER ELEVATION / DEDICATED PRIVATE WING",
       },
       {
@@ -202,7 +202,7 @@ export const marineHouseContent: MarineHouseData = {
         name: "PRIVATE TERRACE",
         description:
           "Monolithic travertine pool deck terminating at the edge of the Arabian Sea.",
-        image: "/images/marine-house-terrace.jpg",
+        image: "/images/marine-house-terrace.webp",
         aspect: "OPEN HORIZON / COASTAL WATERFRONT",
       },
     ],
@@ -212,14 +212,14 @@ export const marineHouseContent: MarineHouseData = {
     headlineLines: ["PRIVACY,", "ABOVE THE WATER."],
     paragraph:
       "Elevated above the public entertaining volumes, the primary suite exists as a sanctuary of silence. Morning mist and sea breezes filter through slatted cedar screens.",
-    image: "/images/marine-house-suite.jpg",
+    image: "/images/marine-house-suite.webp",
     imageAlt: "Primary bedroom suite with panoramic coastal views and private terrace",
     elevationNote: "LEVEL 02 / ELEVATION +8.4M",
   },
   ocean: {
     eyebrow: "06 / OCEAN TERRACE",
     headlineLines: ["THE HORIZON BECOMES", "PART OF THE ROOM."],
-    image: "/images/marine-house-terrace.jpg",
+    image: "/images/marine-house-terrace.webp",
     imageAlt: "Full-width architectural terrace overlooking the open Arabian Sea horizon",
     coordinateNote: "COASTAL HORIZON / 18.9220 N, 72.8347 E",
   },

@@ -54,7 +54,7 @@ export const journalContent: JournalContent = {
     readTime: "08 MIN READ",
     publication: "AURELIS JOURNAL",
     image: {
-      src: "/images/the-desert-court.jpg",
+      src: "/images/the-desert-court.webp",
       alt: "Monolithic stone architectural volumes in dialogue with natural desert light",
       caption: "ESSAY 01 / STRUCTURAL PERMANENCE & MASS",
     },
@@ -70,7 +70,7 @@ export const journalContent: JournalContent = {
       readTime: "06 MIN READ",
       alignment: "left",
       image: {
-        src: "/images/the-cliff-residence.jpg",
+        src: "/images/the-cliff-residence.webp",
         alt: "Coastal residence embedded seamlessly into rugged maritime cliff",
         caption: "TOPOGRAPHY / COASTAL EMBEDMENT",
         aspectRatio: "aspect-[16/10]",
@@ -86,7 +86,7 @@ export const journalContent: JournalContent = {
       readTime: "05 MIN READ",
       alignment: "right",
       image: {
-        src: "/images/marine-house-dining.jpg",
+        src: "/images/marine-house-dining.webp",
         alt: "Honed Roman travertine, bronze joinery, and water reflection basin",
         caption: "MATERIALITY / SURFACE & WEATHERING",
         aspectRatio: "aspect-[4/3]",
@@ -102,7 +102,7 @@ export const journalContent: JournalContent = {
       readTime: "07 MIN READ",
       alignment: "left",
       image: {
-        src: "/images/marine-house-hero.jpg",
+        src: "/images/marine-house-hero.webp",
         alt: "Cantilevered stone pavilions glowing under the final coastal dusk light",
         caption: "DIURNAL CYCLES / DUSK HORIZON",
         aspectRatio: "aspect-[16/10]",

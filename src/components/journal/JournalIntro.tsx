@@ -17,7 +17,7 @@ export const JournalIntro: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-end pb-12 md:pb-16 border-b border-white/[0.07] relative">
         {/* Left Headline (~60% width on desktop) */}
         <div className="lg:col-span-7 xl:col-span-7">
-          <h2 className="journal-intro-headline text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5.25rem] font-light font-serif text-[#f6f6f4] tracking-[-0.02em] leading-[0.98]">
+          <h2 className="journal-intro-headline display-lg font-light font-serif text-[#f6f6f4] tracking-[-0.02em] leading-[0.98]">
             <span className="block overflow-hidden">
               <span className="inline-block">{headlineLines[0]}</span>
             </span>

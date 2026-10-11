@@ -1,6 +1,7 @@
 import React from "react";
 import { ArrowUpRight } from "@phosphor-icons/react";
 import { journalContent } from "./journalData";
+import { Img } from "../Img";
 
 interface EditorialIndexProps {
   onNavigate?: (path: string) => void;
@@ -51,11 +52,10 @@ export const EditorialIndex: React.FC<EditorialIndexProps> = ({ onNavigate }) =>
                       <div
                         className={`editorial-row-image-wrapper relative overflow-hidden bg-[#121517] ${story.image.aspectRatio} border border-white/[0.08] max-w-md group-hover:border-white/[0.16] transition-colors duration-500`}
                       >
-                        <img
+                        <Img
                           src={story.image.src}
                           alt={story.image.alt}
                           className="editorial-row-image h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.025]"
-                          loading="lazy"
                         />
                         <div className="absolute bottom-3 left-3 bg-[#0a0c0d]/85 backdrop-blur-md px-3 py-1.5 border border-white/[0.08] text-[8.5px] tracking-[0.22em] uppercase text-[#c8c2b5]/80 pointer-events-none">
                           {story.image.caption}
@@ -126,11 +126,10 @@ export const EditorialIndex: React.FC<EditorialIndexProps> = ({ onNavigate }) =>
                       <div
                         className={`editorial-row-image-wrapper relative overflow-hidden bg-[#121517] ${story.image.aspectRatio} border border-white/[0.08] max-w-md group-hover:border-white/[0.16] transition-colors duration-500`}
                       >
-                        <img
+                        <Img
                           src={story.image.src}
                           alt={story.image.alt}
                           className="editorial-row-image h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.025]"
-                          loading="lazy"
                         />
                         <div className="absolute bottom-3 left-3 bg-[#0a0c0d]/85 backdrop-blur-md px-3 py-1.5 border border-white/[0.08] text-[8.5px] tracking-[0.22em] uppercase text-[#c8c2b5]/80 pointer-events-none">
                           {story.image.caption}

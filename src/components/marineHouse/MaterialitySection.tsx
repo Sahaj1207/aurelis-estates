@@ -1,5 +1,6 @@
 import React from "react";
 import { marineHouseContent } from "../../data/marineHouseContent";
+import { Img } from "../Img";
 
 export const MaterialitySection: React.FC = () => {
   const { materiality } = marineHouseContent;
@@ -62,13 +63,12 @@ export const MaterialitySection: React.FC = () => {
               data-reveal="image-container"
               className="relative overflow-hidden bg-[#121517] aspect-[16/10] border border-white/[0.08] group"
             >
-              <img
+              <Img
                 data-reveal="image"
                 data-parallax="image"
                 src={materiality.image}
                 alt={materiality.imageAlt}
                 className="h-full w-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-[1.025]"
-                loading="lazy"
               />
               <div
                 data-reveal="caption"

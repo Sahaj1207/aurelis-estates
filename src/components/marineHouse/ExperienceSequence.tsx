@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
 import { marineHouseContent } from "../../data/marineHouseContent";
+import { Img } from "../Img";
 
 export const ExperienceSequence: React.FC = () => {
   const { experience } = marineHouseContent;
@@ -177,7 +178,7 @@ export const ExperienceSequence: React.FC = () => {
               className="relative overflow-hidden bg-[#121517] aspect-[4/3] sm:aspect-[16/11] border border-white/[0.08]"
             >
               {experience.zones.map((zone, idx) => (
-                <img
+                <Img
                   key={zone.id}
                   ref={(el) => {
                     imageRefs.current[idx] = el;

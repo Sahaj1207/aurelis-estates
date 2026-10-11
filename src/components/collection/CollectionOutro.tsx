@@ -3,9 +3,9 @@ import { collectionOutroData } from "./collectionData";
 
 export const CollectionOutro: React.FC = () => {
   return (
-    <div className="collection-outro-block mx-auto max-w-[1720px] px-6 sm:px-8 md:px-12 lg:px-16 py-24 md:py-36 lg:py-44">
+    <div className="collection-outro-block mx-auto max-w-[1720px] px-6 sm:px-8 md:px-12 lg:px-16 py-20 md:py-32 lg:py-36">
       <div className="max-w-4xl">
-        <h3 className="collection-outro-headline text-3xl sm:text-4xl md:text-5xl lg:text-[4rem] font-light font-serif text-[#f6f6f4] tracking-[-0.015em] leading-[1.02] mb-8">
+        <h3 className="collection-outro-headline display-lg font-light font-serif text-[#f6f6f4] tracking-[-0.015em] leading-[1.02] mb-8">
           <span className="block">{collectionOutroData.headline.line1}</span>
           <span className="block">{collectionOutroData.headline.line2}</span>
           <span className="block text-[#dfd7c6]">{collectionOutroData.headline.line3}</span>

@@ -50,7 +50,7 @@ export const approachContent: ApproachContent = {
   supportingCopy:
     "AURELIS looks beyond the address. We consider how architecture meets its setting, how materials gather character, how daylight moves through a room, and how a residence changes the experience of living.",
   manifestoImage: {
-    src: "/images/the-desert-court.jpg",
+    src: "/images/the-desert-court.webp",
     alt: "Architectural facade showing clean stone volumes and natural sunlight shadows",
     caption: "ARCHITECTURAL STUDY / LIGHT & GEOMETRY",
   },
@@ -64,7 +64,7 @@ export const approachContent: ApproachContent = {
         "Coastline, landscape, climate, and context are not backdrops. They are part of the architecture.",
       alignment: "left",
       image: {
-        src: "/images/the-cliff-residence.jpg",
+        src: "/images/the-cliff-residence.webp",
         alt: "Coastal residence embedded into monolithic sea cliffs",
         caption: "TOPOGRAPHY STUDY / COASTAL INTEGRATION",
         aspectRatio: "aspect-[16/10]",
@@ -79,7 +79,7 @@ export const approachContent: ApproachContent = {
         "Stone, timber, concrete, metal, and glass are considered for how they age, weather, and gather character.",
       alignment: "right",
       image: {
-        src: "/images/marine-house-dining.jpg",
+        src: "/images/marine-house-dining.webp",
         alt: "Honed Roman travertine, bronze framed thermal glass, and reflection basin",
         caption: "MATERIAL INDEX / TRAVERTINE, BRONZE & WATER",
         aspectRatio: "aspect-[4/5]",
@@ -94,7 +94,7 @@ export const approachContent: ApproachContent = {
         "Morning, afternoon, dusk, reflection, shadow. The changing light becomes part of the experience of the residence.",
       alignment: "left",
       image: {
-        src: "/images/marine-house-living.jpg",
+        src: "/images/marine-house-living.webp",
         alt: "Double-height interior volume illuminated by shifting sea light",
         caption: "SPATIAL DIALOGUE / DIURNAL ILLUMINATION",
         aspectRatio: "aspect-[16/10]",
@@ -109,7 +109,7 @@ export const approachContent: ApproachContent = {
         "Restraint, proportion, privacy, and calm create spaces that do not need to announce themselves.",
       alignment: "right",
       image: {
-        src: "/images/marine-house-terrace.jpg",
+        src: "/images/marine-house-terrace.webp",
         alt: "Quiet open terrace terminating at calm water and distant sea horizon",
         caption: "SPATIAL RESTRAINT / MINIMAL HORIZON",
         aspectRatio: "aspect-[16/9]",
@@ -123,7 +123,7 @@ export const approachContent: ApproachContent = {
     subtext:
       "AURELIS exists for places where architecture, setting, and life are inseparable.",
     image: {
-      src: "/images/the-garden-house.jpg",
+      src: "/images/the-garden-house.webp",
       alt: "Quiet stone pavilion resting within protected garden landscape",
       caption: "PORTFOLIO STUDY / ARCHITECTURAL QUIETUDE",
     },

@@ -1,5 +1,6 @@
 import React from "react";
 import { ArrowDown } from "@phosphor-icons/react";
+import { scrollToTarget } from "../services/smoothScroll";
 
 interface SecondaryButtonProps {
   label: string;
@@ -22,14 +23,7 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
     if (targetId) {
       e.preventDefault();
       const targetElement = document.getElementById(targetId);
-      if (targetElement) {
-        targetElement.scrollIntoView({ behavior: "smooth" });
-      } else {
-        window.scrollTo({
-          top: window.innerHeight * 0.8,
-          behavior: "smooth",
-        });
-      }
+      scrollToTarget(targetElement ?? window.innerHeight * 0.8, { duration: 1.3 });
     }
   };
 
@@ -44,7 +38,7 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
         <span>{label}</span>
         <span className="absolute bottom-0 left-0 h-[1px] w-0 bg-[#dfd7c6] transition-all duration-300 ease-out group-hover:w-full" />
       </span>
-      <span className="flex h-6 w-6 items-center justify-center rounded-full border border-white/10 transition-all duration-300 group-hover:border-white/30 group-hover:translate-y-0.5">
+      <span className="flex h-7 w-7 items-center justify-center rounded-full border border-white/20 transition-all duration-300 group-hover:border-white/40 group-hover:translate-y-0.5">
         <ArrowDown size={12} weight="regular" className="text-[#c8c2b5] group-hover:text-[#f6f6f4]" />
       </span>
     </button>

@@ -4,10 +4,16 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Mobile browsers fire resize whenever the address bar shows or hides. Refreshing
+// pinned triggers on each of those makes the page visibly jump mid-scroll.
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 let lenisInstance: Lenis | null = null;
 let tickerCallback: ((time: number) => void) | null = null;
 let refreshListener: (() => void) | null = null;
 let resizeListener: (() => void) | null = null;
+let resizeTimer: number | undefined;
+let scrollLocks = 0;
 
 export function getLenis(): Lenis | null {
   return lenisInstance;
@@ -54,7 +60,7 @@ export function getSavedHomepageScroll(): number | null {
     if (
       data &&
       typeof data.scrollY === "number" &&
-      (data.targetPath === "/residences/the-marine-house" ||
+      (data.targetPath.startsWith("/residences/the-marine-house") ||
         data.targetPath.startsWith("/journal"))
     ) {
       return data.scrollY;
@@ -93,18 +99,18 @@ export function initSmoothScroll(): (() => void) | undefined {
 
   // Configure Lenis with restrained luxury tuning
   const lenis = new Lenis({
-    duration: 1.15, // Subtle continuous momentum without lag
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Exponential deceleration
+    lerp: 0.095, // Continuous momentum that still tracks the wheel closely
     orientation: "vertical",
     gestureOrientation: "vertical",
     smoothWheel: true,
     syncTouch: false, // Keep touch scrolling native and responsive on mobile devices
-    wheelMultiplier: 0.95,
+    wheelMultiplier: 1,
     touchMultiplier: 1.5,
     autoRaf: false, // Driven strictly by GSAP ticker for a single unified animation loop
   });
 
   lenisInstance = lenis;
+  if (scrollLocks > 0) lenis.stop();
 
   // Synchronize Lenis scroll coordinates with GSAP ScrollTrigger
   lenis.on("scroll", ScrollTrigger.update);
@@ -124,9 +130,17 @@ export function initSmoothScroll(): (() => void) | undefined {
   };
   ScrollTrigger.addEventListener("refresh", refreshListener);
 
+  // Only a change in width alters layout; height-only changes are the mobile
+  // address bar and must not trigger a refresh.
+  let lastWidth = window.innerWidth;
   resizeListener = () => {
-    lenis.resize();
-    ScrollTrigger.refresh();
+    if (window.innerWidth === lastWidth) return;
+    lastWidth = window.innerWidth;
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => {
+      lenis.resize();
+      ScrollTrigger.refresh();
+    }, 160);
   };
   window.addEventListener("resize", resizeListener);
 
@@ -134,6 +148,8 @@ export function initSmoothScroll(): (() => void) | undefined {
 }
 
 export function destroySmoothScroll(): void {
+  window.clearTimeout(resizeTimer);
+
   if (resizeListener) {
     window.removeEventListener("resize", resizeListener);
     resizeListener = null;
@@ -155,6 +171,25 @@ export function destroySmoothScroll(): void {
   }
 }
 
+// Counted lock so overlapping owners (intro curtain, mobile menu) cannot
+// release the page while another still needs it held.
+export function lockScroll(): void {
+  scrollLocks += 1;
+  if (scrollLocks === 1) {
+    lenisInstance?.stop();
+    document.documentElement.style.overflow = "hidden";
+  }
+}
+
+export function unlockScroll(): void {
+  if (scrollLocks === 0) return;
+  scrollLocks -= 1;
+  if (scrollLocks === 0) {
+    lenisInstance?.start();
+    document.documentElement.style.overflow = "";
+  }
+}
+
 export function scrollToTarget(
   target: string | number | HTMLElement,
   options?: {
@@ -168,6 +203,8 @@ export function scrollToTarget(
       offset: options?.offset ?? 0,
       immediate: options?.immediate ?? false,
       duration: options?.duration ?? 1.1,
+      // Programmatic jumps must land even while the page is held by a scroll lock
+      force: true,
     });
   } else {
     if (typeof target === "number") {

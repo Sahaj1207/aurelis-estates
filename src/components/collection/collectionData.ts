@@ -48,7 +48,7 @@ export const collectionResidencesData: CollectionResidence[] = [
       { label: "Status", value: "PRIVATE ACQUISITION" },
     ],
     image: {
-      src: "/images/marine-house-hero.jpg",
+      src: "/images/marine-house-hero.webp",
       alt: "The Marine House coastal residence pavilion and reflection pool at dusk in Mumbai",
       objectPosition: "center 50%",
     },
@@ -73,7 +73,7 @@ export const collectionResidencesData: CollectionResidence[] = [
       { label: "Status", value: "CONFIDENTIAL COMMISSION" },
     ],
     image: {
-      src: "/images/the-desert-court.jpg",
+      src: "/images/the-desert-court.webp",
       alt: "The Desert Court modernist residence with rammed earth walls and reflecting pool in AlUla",
       objectPosition: "center center",
     },
@@ -97,7 +97,7 @@ export const collectionResidencesData: CollectionResidence[] = [
       { label: "Status", value: "CONFIDENTIAL COMMISSION" },
     ],
     image: {
-      src: "/images/the-garden-house.jpg",
+      src: "/images/the-garden-house.webp",
       alt: "The Garden House tropical modernist villa with laterite stone and inner garden courtyard in Goa",
       objectPosition: "center center",
     },
@@ -121,7 +121,7 @@ export const collectionResidencesData: CollectionResidence[] = [
       { label: "Status", value: "CONFIDENTIAL COMMISSION" },
     ],
     image: {
-      src: "/images/the-cliff-residence.jpg",
+      src: "/images/the-cliff-residence.webp",
       alt: "The Cliff Residence limestone villa and cantilevered pool over the Mediterranean in Amalfi",
       objectPosition: "center center",
     },

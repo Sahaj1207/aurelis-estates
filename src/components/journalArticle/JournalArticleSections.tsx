@@ -1,6 +1,7 @@
 import React from "react";
 import type { JournalArticleData } from "../../data/journalArticlesData";
 import { JournalPullQuote } from "./JournalPullQuote";
+import { Img } from "../Img";
 
 interface JournalArticleSectionsProps {
   article: JournalArticleData;
@@ -44,11 +45,10 @@ export const JournalArticleSections: React.FC<JournalArticleSectionsProps> = ({ 
                   section1.image.aspectRatio ?? "aspect-[4/3]"
                 } border border-white/[0.08] group`}
               >
-                <img
+                <Img
                   src={section1.image.src}
                   alt={section1.image.alt}
                   className="article-section-image h-full w-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-[1.025]"
-                  loading="lazy"
                 />
                 <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 bg-[#0a0c0d]/85 backdrop-blur-md px-4 py-2 border border-white/[0.08] text-[9.5px] tracking-[0.24em] uppercase text-[#c8c2b5]/80 pointer-events-none">
                   {section1.image.caption}
@@ -80,11 +80,10 @@ export const JournalArticleSections: React.FC<JournalArticleSectionsProps> = ({ 
                   section2.image.aspectRatio ?? "aspect-[16/10]"
                 } border border-white/[0.08] group`}
               >
-                <img
+                <Img
                   src={section2.image.src}
                   alt={section2.image.alt}
                   className="article-section-image h-full w-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-[1.025]"
-                  loading="lazy"
                 />
                 <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 bg-[#0a0c0d]/85 backdrop-blur-md px-4 py-2 border border-white/[0.08] text-[9.5px] tracking-[0.24em] uppercase text-[#c8c2b5]/80 pointer-events-none">
                   {section2.image.caption}
@@ -145,11 +144,10 @@ export const JournalArticleSections: React.FC<JournalArticleSectionsProps> = ({ 
                   section3.image.aspectRatio ?? "aspect-[4/3]"
                 } border border-white/[0.08] group`}
               >
-                <img
+                <Img
                   src={section3.image.src}
                   alt={section3.image.alt}
                   className="article-section-image h-full w-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-[1.025]"
-                  loading="lazy"
                 />
                 <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 bg-[#0a0c0d]/85 backdrop-blur-md px-4 py-2 border border-white/[0.08] text-[9.5px] tracking-[0.24em] uppercase text-[#c8c2b5]/80 pointer-events-none">
                   {section3.image.caption}
@@ -186,11 +184,10 @@ export const JournalArticleSections: React.FC<JournalArticleSectionsProps> = ({ 
         {/* Intentionally Oversized Architectural Plate */}
         {section4.image && (
           <div className="article-section-image-wrapper relative overflow-hidden bg-[#121517] aspect-[16/9] sm:aspect-[21/9] border border-white/[0.08] group w-full">
-            <img
+            <Img
               src={section4.image.src}
               alt={section4.image.alt}
               className="article-section-image h-full w-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-[1.02]"
-              loading="lazy"
             />
             <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 bg-[#0a0c0d]/85 backdrop-blur-md px-4 py-2 border border-white/[0.08] text-[9.5px] tracking-[0.24em] uppercase text-[#c8c2b5]/80 pointer-events-none">
               {section4.image.caption}

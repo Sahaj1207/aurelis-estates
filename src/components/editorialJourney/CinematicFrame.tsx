@@ -17,7 +17,7 @@ export const CinematicFrame: React.FC<CinematicFrameProps> = ({
   if (frame.layout === "fullscreen-exterior") {
     return (
       <div
-        className={`relative h-full w-full flex flex-col justify-between p-6 sm:p-10 md:p-14 lg:p-18 ${className}`}
+        className={`relative h-full w-full flex flex-col justify-between px-6 sm:px-10 md:px-14 lg:px-16 pt-28 pb-24 ${className}`}
       >
         <div className="absolute inset-0 z-0">
           <CinematicImage
@@ -41,7 +41,7 @@ export const CinematicFrame: React.FC<CinematicFrameProps> = ({
   if (frame.layout === "mask-transition") {
     return (
       <div
-        className={`relative h-full w-full flex flex-col justify-center p-6 sm:p-10 md:p-14 lg:p-18 ${className}`}
+        className={`relative h-full w-full flex flex-col justify-center px-6 sm:px-10 md:px-14 lg:px-16 pt-28 pb-24 ${className}`}
       >
         <div className="mx-auto w-full max-w-[1720px] grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
           <div className="lg:col-span-8 aspect-[16/10] overflow-hidden border border-white/[0.08]">
@@ -64,13 +64,13 @@ export const CinematicFrame: React.FC<CinematicFrameProps> = ({
   if (frame.layout === "split-interior") {
     return (
       <div
-        className={`relative h-full w-full flex flex-col justify-center p-6 sm:p-10 md:p-14 lg:p-18 ${className}`}
+        className={`relative h-full w-full flex flex-col justify-center px-6 sm:px-10 md:px-14 lg:px-16 pt-28 pb-24 ${className}`}
       >
         <div className="mx-auto w-full max-w-[1720px] grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
-          <div className="lg:col-span-5 order-2 lg:order-1">
+          <div className="lg:col-span-4 order-2 lg:order-1">
             <CinematicCopy frame={frame} />
           </div>
-          <div className="lg:col-span-7 order-1 lg:order-2 aspect-[16/10] overflow-hidden border border-white/[0.08]">
+          <div className="lg:col-span-8 order-1 lg:order-2 aspect-[16/10] overflow-hidden border border-white/[0.08]">
             <CinematicImage
               src={frame.image.src}
               alt={frame.image.alt}
@@ -87,7 +87,7 @@ export const CinematicFrame: React.FC<CinematicFrameProps> = ({
   if (frame.layout === "asymmetric-dining") {
     return (
       <div
-        className={`relative h-full w-full flex flex-col justify-center p-6 sm:p-10 md:p-14 lg:p-18 ${className}`}
+        className={`relative h-full w-full flex flex-col justify-center px-6 sm:px-10 md:px-14 lg:px-16 pt-28 pb-24 ${className}`}
       >
         <div className="mx-auto w-full max-w-[1720px] grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
           <div className="lg:col-span-8 aspect-[16/9] overflow-hidden border border-white/[0.08]">
@@ -110,7 +110,7 @@ export const CinematicFrame: React.FC<CinematicFrameProps> = ({
   if (frame.layout === "suite-sanctuary") {
     return (
       <div
-        className={`relative h-full w-full flex flex-col justify-center p-6 sm:p-10 md:p-14 lg:p-18 ${className}`}
+        className={`relative h-full w-full flex flex-col justify-center px-6 sm:px-10 md:px-14 lg:px-16 pt-28 pb-24 ${className}`}
       >
         <div className="mx-auto w-full max-w-[1720px] grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-20 items-center">
           <div className="lg:col-span-4 lg:col-start-2">
@@ -133,7 +133,7 @@ export const CinematicFrame: React.FC<CinematicFrameProps> = ({
   if (frame.layout === "terrace-wide") {
     return (
       <div
-        className={`relative h-full w-full flex flex-col justify-between p-6 sm:p-10 md:p-14 lg:p-18 ${className}`}
+        className={`relative h-full w-full flex flex-col justify-between px-6 sm:px-10 md:px-14 lg:px-16 pt-28 pb-24 ${className}`}
       >
         <div className="absolute inset-0 z-0">
           <CinematicImage
@@ -155,7 +155,7 @@ export const CinematicFrame: React.FC<CinematicFrameProps> = ({
   // FRAME 07: Final statement, extremely minimal, substantial empty space
   return (
     <div
-      className={`relative h-full w-full flex items-center justify-center p-6 sm:p-10 md:p-14 lg:p-18 ${className}`}
+      className={`relative h-full w-full flex items-center justify-center px-6 sm:px-10 md:px-14 lg:px-16 pt-28 pb-24 ${className}`}
     >
       <div className="absolute inset-0 z-0 opacity-30">
         <CinematicImage

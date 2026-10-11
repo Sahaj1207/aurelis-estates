@@ -1,6 +1,7 @@
 import React from "react";
 import { ArrowUpRight } from "@phosphor-icons/react";
 import { journalContent } from "./journalData";
+import { Img } from "../Img";
 
 interface FeaturedStoryProps {
   onNavigate?: (path: string) => void;
@@ -35,11 +36,10 @@ export const FeaturedStory: React.FC<FeaturedStoryProps> = ({ onNavigate }) => {
         {/* Dominant Cover Spread Architectural Image (~7-8 cols at desktop) */}
         <div className="lg:col-span-7 xl:col-span-8">
           <div className="featured-story-image-wrapper relative overflow-hidden bg-[#121517] aspect-[16/10] sm:aspect-[21/11] border border-white/[0.08] group-hover:border-white/[0.18] transition-colors duration-500">
-            <img
+            <Img
               src={featuredStory.image.src}
               alt={featuredStory.image.alt}
               className="featured-story-image h-full w-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-[1.025]"
-              loading="lazy"
             />
             {/* Architectural Stamp */}
             <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 bg-[#0a0c0d]/85 backdrop-blur-md px-4 py-2 border border-white/[0.08] text-[9.5px] tracking-[0.24em] uppercase text-[#c8c2b5]/80 pointer-events-none">

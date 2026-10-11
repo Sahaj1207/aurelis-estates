@@ -46,7 +46,7 @@ export const heroContent: EstateHeroData = {
   ],
   primaryAction: {
     label: "Private Inquiry",
-    href: "#inquiry",
+    href: "/inquiry",
   },
   eyebrow: "AURELIS ESTATES / PRIVATE RESIDENCES",
   headline: {
@@ -69,7 +69,7 @@ export const heroContent: EstateHeroData = {
     coordinates: "18.9220 N, 72.8347 E",
   },
   image: {
-    src: "/images/marine-house-hero.jpg",
+    src: "/images/marine-house-hero.webp",
     alt: "The Marine House contemporary private residence in Mumbai at sunset with cantilevered stone pavilions and reflection pool",
   },
 };
@@ -112,9 +112,9 @@ export const featuredResidenceContent: FeaturedResidenceData = {
     href: "/residences/the-marine-house",
   },
   image: {
-    src: "/images/marine-house-hero.jpg",
-    alt: "The Marine House architectural framing displaying cantilevered travertine pavilions and basalt water features",
-    architecturalCropLabel: "MUMBAI COASTAL MONOLITH / 18.9220 N, 72.8347 E",
+    src: "/images/marine-house-living.webp",
+    alt: "Double-height living volume of The Marine House opening onto the reflection pool at dusk",
+    architecturalCropLabel: "LIVING VOLUME / 18.9220 N, 72.8347 E",
   },
 };
 

@@ -18,9 +18,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface MarineHouseMonographProps {
   onBack: () => void;
+  onNavigate?: (path: string) => void;
 }
 
-export const MarineHouseMonograph: React.FC<MarineHouseMonographProps> = ({ onBack }) => {
+export const MarineHouseMonograph: React.FC<MarineHouseMonographProps> = ({ onBack, onNavigate }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -408,12 +409,13 @@ export const MarineHouseMonograph: React.FC<MarineHouseMonographProps> = ({ onBa
 
       {/* Flagship Monograph Architectural Sequence with responsive header offset */}
       <main
+        data-gallery
         style={{
           paddingTop: isMobile ? `${headerHeight || 72}px` : undefined,
         }}
       >
         <MarineHouseHero />
-        <ResidenceStatement />
+        <ResidenceStatement onTour={onNavigate ? () => onNavigate("/residences/the-marine-house/tour") : undefined} />
         <MaterialitySection />
         <LivingSection />
         <ExperienceSequence />

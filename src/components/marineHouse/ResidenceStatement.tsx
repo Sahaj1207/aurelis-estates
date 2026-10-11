@@ -1,7 +1,13 @@
 import React from "react";
 import { marineHouseContent } from "../../data/marineHouseContent";
+import { ArrowUpRight } from "@phosphor-icons/react";
+import { Img } from "../Img";
 
-export const ResidenceStatement: React.FC = () => {
+interface ResidenceStatementProps {
+  onTour?: () => void;
+}
+
+export const ResidenceStatement: React.FC<ResidenceStatementProps> = ({ onTour }) => {
   const { residence } = marineHouseContent;
 
   return (
@@ -49,6 +55,27 @@ export const ResidenceStatement: React.FC = () => {
               <span className="h-1 w-1 rounded-full bg-white/20" />
               <span>COASTAL AXIS</span>
             </div>
+
+            {onTour && (
+              <div data-reveal="cta" className="pt-10">
+                <a
+                  href="/residences/the-marine-house/tour"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onTour();
+                  }}
+                  className="group inline-flex items-center gap-5 bg-[#dfd7c6] py-2 pl-6 pr-2 text-[11px] font-medium tracking-[0.22em] uppercase text-[#0a0c0d] transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[#f6f6f4] active:scale-[0.98]"
+                >
+                  <span>Walk the residence</span>
+                  <span className="flex h-9 w-9 items-center justify-center bg-[#0a0c0d]/10 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                    <ArrowUpRight size={15} />
+                  </span>
+                </a>
+                <p className="mt-3.5 text-[10px] tracking-[0.2em] uppercase text-[#c8c2b5]/50">
+                  Interactive 3D walk-through
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Right Asymmetric Architectural Framing */}
@@ -57,13 +84,12 @@ export const ResidenceStatement: React.FC = () => {
               data-reveal="image-container"
               className="relative overflow-hidden bg-[#121517] aspect-[4/3] sm:aspect-[16/11] border border-white/[0.08] group"
             >
-              <img
+              <Img
                 data-reveal="image"
                 data-parallax="image"
                 src={residence.image}
                 alt={residence.imageAlt}
                 className="h-full w-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-[1.025]"
-                loading="lazy"
               />
               <div
                 data-reveal="caption"

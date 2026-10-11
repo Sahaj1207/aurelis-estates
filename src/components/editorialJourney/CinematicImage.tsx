@@ -1,4 +1,5 @@
 import React from "react";
+import { Img } from "../Img";
 
 interface CinematicImageProps {
   src: string;
@@ -6,6 +7,7 @@ interface CinematicImageProps {
   objectPosition?: string;
   className?: string;
   caption?: string;
+  sizes?: string;
 }
 
 export const CinematicImage: React.FC<CinematicImageProps> = ({
@@ -14,15 +16,17 @@ export const CinematicImage: React.FC<CinematicImageProps> = ({
   objectPosition = "center center",
   className = "",
   caption,
+  sizes,
 }) => {
   return (
     <div
       className={`relative h-full w-full overflow-hidden bg-[#121517] ${className}`}
     >
-      <img
+      <Img
         src={src}
         alt={alt}
         style={{ objectPosition }}
+        sizes={sizes}
         className="h-full w-full object-cover will-change-transform"
       />
 

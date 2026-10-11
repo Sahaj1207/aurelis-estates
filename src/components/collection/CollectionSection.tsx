@@ -2,9 +2,8 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CollectionIntro } from "./CollectionIntro";
-import { ResidenceItem } from "./ResidenceItem";
+import { ResidenceRail } from "./ResidenceRail";
 import { CollectionOutro } from "./CollectionOutro";
-import { collectionResidencesData } from "./collectionData";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -127,16 +126,8 @@ export const CollectionSection: React.FC<CollectionSectionProps> = ({
       {/* 1. Editorial Section Intro */}
       <CollectionIntro />
 
-      {/* 2. Alternating Asymmetric Editorial Portfolio */}
-      <div className="flex flex-col">
-        {collectionResidencesData.map((residence) => (
-          <ResidenceItem
-            key={residence.id}
-            residence={residence}
-            onNavigate={onNavigate}
-          />
-        ))}
-      </div>
+      {/* 2. Draggable Residence Index */}
+      <ResidenceRail onNavigate={onNavigate} />
 
       {/* 3. Spacious Editorial Outro */}
       <CollectionOutro />

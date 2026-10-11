@@ -1,5 +1,6 @@
 import React from "react";
 import { marineHouseContent } from "../../data/marineHouseContent";
+import { Img } from "../Img";
 
 export const OceanSection: React.FC = () => {
   const { ocean } = marineHouseContent;
@@ -52,13 +53,12 @@ export const OceanSection: React.FC = () => {
         {/* Dominant Panoramic Ocean Terrace Plate */}
         <div data-reveal="image-container" className="mt-10 md:mt-14">
           <div className="relative overflow-hidden bg-[#121517] aspect-[16/9] sm:aspect-[21/9] w-full border border-white/[0.08] group">
-            <img
+            <Img
               data-reveal="image"
               data-parallax="image"
               src={ocean.image}
               alt={ocean.imageAlt}
               className="h-full w-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-[1.02]"
-              loading="lazy"
             />
             <div
               data-reveal="caption"

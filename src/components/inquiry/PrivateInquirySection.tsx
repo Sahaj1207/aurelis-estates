@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { ArrowUpRight } from "@phosphor-icons/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Img } from "../Img";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -142,7 +143,7 @@ export const PrivateInquirySection: React.FC<PrivateInquirySectionProps> = ({
       id="inquiry"
       ref={sectionRef}
       aria-label="AURELIS Private Inquiry"
-      className="relative z-20 bg-[#0a0c0d] text-[#f6f6f4] px-6 sm:px-8 md:px-12 lg:px-16 pt-24 sm:pt-32 md:pt-40 lg:pt-48 pb-20 sm:pb-28 md:pb-36 border-t border-white/[0.06]"
+      className="relative z-20 bg-[#0a0c0d] text-[#f6f6f4] px-6 sm:px-8 md:px-12 lg:px-16 pt-20 sm:pt-28 md:pt-36 pb-20 sm:pb-28 md:pb-32 border-t border-white/[0.06]"
     >
       <div className="mx-auto max-w-[1720px]">
         {/* Section Marker */}
@@ -157,7 +158,7 @@ export const PrivateInquirySection: React.FC<PrivateInquirySectionProps> = ({
           {/* Left Wing: Dominant Headline, Narrative Copy, and Text CTA (Cols 1-6) */}
           <div className="lg:col-span-6 flex flex-col justify-between h-full">
             {/* Dominant Editorial Headline */}
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.75rem] font-light font-serif tracking-[-0.015em] leading-[1.08] text-[#f6f6f4]">
+            <h2 className="display-lg font-light font-serif tracking-[-0.015em] leading-[1.08] text-[#f6f6f4]">
               <span className="inquiry-headline-line block overflow-hidden">
                 <span className="block">A RESIDENCE THIS</span>
               </span>
@@ -173,7 +174,7 @@ export const PrivateInquirySection: React.FC<PrivateInquirySectionProps> = ({
             </h2>
 
             {/* Narrative & Action Block with Generous Negative Space */}
-            <div className="mt-12 sm:mt-16 md:mt-24 lg:mt-32 flex flex-col items-start max-w-xl">
+            <div className="mt-10 sm:mt-14 md:mt-16 lg:mt-20 flex flex-col items-start max-w-xl">
               <p className="inquiry-copy text-[14.5px] sm:text-[15.5px] md:text-[16px] text-[#c8c2b5]/80 font-light leading-[1.78] tracking-[0.01em] mb-10 sm:mb-12">
                 Private residences are introduced selectively and discussed in confidence. Tell us what you are looking for, and we will begin there.
               </p>
@@ -215,12 +216,11 @@ export const PrivateInquirySection: React.FC<PrivateInquirySectionProps> = ({
             <div className="w-full lg:max-w-[95%] xl:max-w-[90%]">
               {/* Image Frame with Overflow Hidden for Clip & Hover Scale */}
               <div className="inquiry-image-wrapper relative overflow-hidden bg-[#141719] aspect-[4/3] sm:aspect-[16/11] lg:aspect-[16/11]">
-                <img
+                <Img
                   ref={imageRef}
-                  src="/images/the-cliff-residence.jpg"
+                  src="/images/the-cliff-residence.webp"
                   alt="Monolithic stone and glass residence overlooking the sea at twilight"
                   className="w-full h-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.025]"
-                  loading="lazy"
                 />
               </div>
 

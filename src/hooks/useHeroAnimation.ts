@@ -4,22 +4,28 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function useHeroAnimation() {
+// `ready` flips once the intro curtain starts to lift, so the entrance plays in view
+export function useHeroAnimation(ready = true) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const entranceRef = useRef<gsap.core.Timeline | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrollingDown, setIsScrollingDown] = useState(false);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
 
-    // Header scroll trigger
+    // Header state: condensed once off the top, tucked away while reading downward
     const headerTrigger = ScrollTrigger.create({
-      start: "top -55px",
+      start: 0,
+      end: "max",
       onUpdate: (self) => {
-        setIsScrolled(self.progress > 0);
+        const y = self.scroll();
+        setIsScrolled(y > 55);
+        setIsScrollingDown(self.direction === 1 && y > window.innerHeight * 0.6);
       },
     });
 
@@ -32,25 +38,27 @@ export function useHeroAnimation() {
     const ctx = gsap.context(() => {
       // 1. Initial Entry Timeline: Slow, cinematic, and restrained
       const tl = gsap.timeline({
+        paused: true,
         defaults: { ease: "power3.out" },
       });
+      entranceRef.current = tl;
 
-      // Subtle image settle from 1.05 down to 1.0
+      // Image settles out of a slow push-in
       if (imageRef.current) {
         tl.fromTo(
           imageRef.current,
-          { scale: 1.05, opacity: 0.85 },
-          { scale: 1.0, opacity: 1, duration: 2.4, ease: "power2.out" },
+          { scale: 1.12 },
+          { scale: 1.0, duration: 2.6, ease: "power2.out" },
           0
         );
       }
 
       // Header gentle enter
       tl.fromTo(
-        "#main-header",
+        ".header-inner",
         { y: -16, opacity: 0 },
         { y: 0, opacity: 1, duration: 1.1, ease: "power3.out" },
-        0.2
+        0.35
       );
 
       // Hero Eyebrow reveal
@@ -58,21 +66,20 @@ export function useHeroAnimation() {
         ".hero-eyebrow",
         { y: 14, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.9 },
-        0.45
+        0.3
       );
 
-      // Headline lines staggered reveal
+      // Headline lines rise out of their masks
       tl.fromTo(
-        ".hero-headline-line",
-        { y: 36, opacity: 0 },
+        ".hero-headline-inner",
+        { yPercent: 108 },
         {
-          y: 0,
-          opacity: 1,
-          duration: 1.2,
-          stagger: 0.16,
-          ease: "power3.out",
+          yPercent: 0,
+          duration: 1.35,
+          stagger: 0.14,
+          ease: "power4.out",
         },
-        0.6
+        0.35
       );
 
       // Supporting copy
@@ -80,7 +87,7 @@ export function useHeroAnimation() {
         ".hero-supporting-copy",
         { y: 18, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.9 },
-        1.0
+        0.85
       );
 
       // CTAs
@@ -88,7 +95,7 @@ export function useHeroAnimation() {
         ".hero-cta-group",
         { y: 16, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.85 },
-        1.15
+        1.0
       );
 
       // Metadata elements
@@ -96,48 +103,54 @@ export function useHeroAnimation() {
         ".hero-meta-element",
         { y: 16, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.9 },
-        1.25
+        1.15
       );
 
       // 2. Scroll-linked parallax & content exit
       if (imageRef.current) {
         gsap.to(imageRef.current, {
-          yPercent: 14,
+          yPercent: 12,
           ease: "none",
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top top",
             end: "bottom top",
-            scrub: 0.6,
+            scrub: true,
           },
         });
       }
 
       if (contentRef.current) {
         gsap.to(contentRef.current, {
-          y: -35,
-          opacity: 0.25,
-          ease: "power1.in",
+          y: -40,
+          opacity: 0,
+          ease: "none",
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top top",
-            end: "bottom 35%",
-            scrub: 0.5,
+            end: "bottom 45%",
+            scrub: true,
           },
         });
       }
-    }, containerRef);
+    }, document.body);
 
     return () => {
       headerTrigger.kill();
+      entranceRef.current = null;
       ctx.revert();
     };
   }, []);
+
+  useEffect(() => {
+    if (ready) entranceRef.current?.play();
+  }, [ready]);
 
   return {
     containerRef,
     imageRef,
     contentRef,
     isScrolled,
+    isScrollingDown,
   };
 }

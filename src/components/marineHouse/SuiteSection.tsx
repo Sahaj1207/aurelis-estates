@@ -1,5 +1,6 @@
 import React from "react";
 import { marineHouseContent } from "../../data/marineHouseContent";
+import { Img } from "../Img";
 
 export const SuiteSection: React.FC = () => {
   const { suite } = marineHouseContent;
@@ -24,13 +25,12 @@ export const SuiteSection: React.FC = () => {
               data-reveal="image-container"
               className="relative overflow-hidden bg-[#121517] aspect-[4/3] sm:aspect-[16/11] border border-white/[0.08] group"
             >
-              <img
+              <Img
                 data-reveal="image"
                 data-parallax="image"
                 src={suite.image}
                 alt={suite.imageAlt}
                 className="h-full w-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-[1.025]"
-                loading="lazy"
               />
               <div
                 data-reveal="caption"

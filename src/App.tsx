@@ -1,26 +1,11 @@
-import { useState, useEffect, useLayoutEffect } from "react";
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Header } from "./components/Header";
-import { Hero } from "./components/Hero";
-import { FeaturedResidence } from "./components/FeaturedResidence";
-import { CinematicEditorialJourney } from "./components/editorialJourney";
-import { CollectionSection } from "./components/collection";
-import { ApproachSection } from "./components/approach";
-import { JournalSection } from "./components/journal";
-import {
-  PrivateInquirySection,
-  PrivateInquiryPage,
-} from "./components/inquiry";
-import { FooterSection } from "./components/footer";
-import { MarineHouseMonograph } from "./components/marineHouse";
-import { JournalArticlePage } from "./components/journalArticle";
-import { AboutPage } from "./components/about";
-import {
-  journalArticlesMap,
-  monolithicStoneArticle,
-} from "./data/journalArticlesData";
-import { useHeroAnimation } from "./hooks/useHeroAnimation";
-import { heroContent, featuredResidenceContent } from "./data/estateContent";
+import { HomePage } from "./pages/HomePage";
+import { Preloader } from "./components/Preloader";
+import { Cursor } from "./components/Cursor";
+import { Lightbox } from "./components/Lightbox";
 import {
   initSmoothScroll,
   scrollToTarget,
@@ -30,14 +15,48 @@ import {
   getLenis,
 } from "./services/smoothScroll";
 
+// Secondary routes ship as their own chunks so the homepage pays only for itself
+const loadMarineHouse = () => import("./components/marineHouse/MarineHouseMonograph");
+const loadInquiry = () => import("./components/inquiry/PrivateInquiryPage");
+const loadAbout = () => import("./components/about/AboutPage");
+const loadJournalArticle = () => import("./routes/JournalArticleRoute");
+// The walk-through carries the 3D engine, so it is fetched only when someone opens it
+const loadTour = () => import("./components/tour/ResidenceTour");
+
+const MarineHouseMonograph = lazy(() =>
+  loadMarineHouse().then((m) => ({ default: m.MarineHouseMonograph }))
+);
+const PrivateInquiryPage = lazy(() =>
+  loadInquiry().then((m) => ({ default: m.PrivateInquiryPage }))
+);
+const AboutPage = lazy(() => loadAbout().then((m) => ({ default: m.AboutPage })));
+const JournalArticleRoute = lazy(loadJournalArticle);
+const ResidenceTour = lazy(loadTour);
+
+const MARINE_HOUSE_PATH = "/residences/the-marine-house";
+const TOUR_PATH = `${MARINE_HOUSE_PATH}/tour`;
+
+const isDetailRoute = (path: string) =>
+  path === MARINE_HOUSE_PATH ||
+  path === TOUR_PATH ||
+  path === "/inquiry" ||
+  path === "/about" ||
+  path.startsWith("/journal/");
+
+const prefersReducedMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 export function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
-  const { containerRef, imageRef, contentRef, isScrolled } = useHeroAnimation();
+  const [introRevealed, setIntroRevealed] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
+  const veilRef = useRef<HTMLDivElement>(null);
+  const pendingHashRef = useRef<string | null>(null);
 
   // Initialize Lenis smooth scroll synchronized with GSAP ticker
   useEffect(() => {
     // Configure manual browser scroll restoration to prevent native fighting with Lenis
-    if (typeof window !== "undefined" && "scrollRestoration" in window.history) {
+    if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
 
@@ -47,25 +66,58 @@ export function App() {
     };
   }, []);
 
+  // Web fonts change headline metrics; trigger positions must be measured after they land
+  useEffect(() => {
+    document.fonts?.ready.then(() => ScrollTrigger.refresh());
+  }, []);
+
+  // Warm the secondary route chunks once the homepage has settled
+  useEffect(() => {
+    if (!introDone) return;
+    const id = window.setTimeout(() => {
+      loadMarineHouse();
+      loadInquiry();
+      loadAbout();
+      loadJournalArticle();
+    }, 1800);
+    return () => window.clearTimeout(id);
+  }, [introDone]);
+
+  // Cross-route transition: dip to the page colour, swap the route beneath, lift again
+  const transitionTo = useCallback((swap: () => void) => {
+    const veil = veilRef.current;
+    if (!veil || prefersReducedMotion()) {
+      swap();
+      return;
+    }
+    gsap.killTweensOf(veil);
+    gsap.to(veil, {
+      autoAlpha: 1,
+      duration: 0.42,
+      ease: "power2.inOut",
+      onComplete: () => {
+        swap();
+        gsap.to(veil, { autoAlpha: 0, duration: 0.7, delay: 0.12, ease: "power2.out" });
+      },
+    });
+  }, []);
+
   // Listen to browser Back/Forward (popstate)
   useEffect(() => {
     const handlePopState = () => {
       const targetPath = window.location.pathname;
-      if (
-        targetPath === "/residences/the-marine-house" ||
-        targetPath === "/inquiry" ||
-        targetPath === "/about" ||
-        targetPath.startsWith("/journal/")
-      ) {
+      const veil = veilRef.current;
+      // The URL has already changed, so cover instantly and lift over the new route
+      if (veil && !prefersReducedMotion()) {
+        gsap.killTweensOf(veil);
+        gsap.set(veil, { autoAlpha: 1 });
+        gsap.to(veil, { autoAlpha: 0, duration: 0.7, delay: 0.1, ease: "power2.out" });
+      }
+      if (isDetailRoute(targetPath)) {
         saveHomepageScroll(targetPath);
       }
       setCurrentPath(targetPath);
-      if (
-        targetPath === "/residences/the-marine-house" ||
-        targetPath === "/inquiry" ||
-        targetPath === "/about" ||
-        targetPath.startsWith("/journal/")
-      ) {
+      if (isDetailRoute(targetPath)) {
         scrollToTarget(0, { immediate: true });
       }
     };
@@ -73,214 +125,135 @@ export function App() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
-  const navigate = (path: string) => {
-    if (
-      path === "/residences/the-marine-house" ||
-      path === "/inquiry" ||
-      path === "/about" ||
-      path.startsWith("/journal/")
-    ) {
-      // Capture homepage scroll position before entering detail route
-      if (currentPath === "/") {
-        saveHomepageScroll(path);
+  const navigate = useCallback(
+    (path: string) => {
+      if (path.startsWith("/#")) {
+        const hash = path.replace("/", "");
+        if (window.location.pathname === "/") {
+          scrollToTarget(hash, { duration: 1.15 });
+          return;
+        }
+        transitionTo(() => {
+          pendingHashRef.current = hash;
+          clearSavedHomepageScroll();
+          window.history.pushState({}, "", "/");
+          setCurrentPath("/");
+        });
+        return;
       }
-      window.history.pushState({}, "", path);
-      setCurrentPath(path);
-      scrollToTarget(0, { immediate: true });
-    } else if (path.startsWith("/#")) {
-      const hash = path.replace("/", "");
-      window.history.pushState({}, "", "/");
-      setCurrentPath("/");
-      requestAnimationFrame(() => {
-        ScrollTrigger.refresh();
-        scrollToTarget(hash, { duration: 1.15 });
+
+      if (path === window.location.pathname) {
+        scrollToTarget(0, { duration: 1.15 });
+        return;
+      }
+
+      transitionTo(() => {
+        // Capture homepage scroll position before entering detail route
+        if (window.location.pathname === "/" && isDetailRoute(path)) {
+          saveHomepageScroll(path);
+        }
+        window.history.pushState({}, "", path);
+        setCurrentPath(path);
+        if (path !== "/") {
+          scrollToTarget(0, { immediate: true });
+        }
       });
-    } else if (path === "/") {
-      // Returning to homepage
-      window.history.pushState({}, "", path);
-      setCurrentPath(path);
-    } else {
-      window.history.pushState({}, "", path);
-      setCurrentPath(path);
-      scrollToTarget(0, { immediate: true });
-    }
-  };
+    },
+    [transitionTo]
+  );
 
   // Synchronous layout restoration on return to homepage (prevents visual flash at top)
   useLayoutEffect(() => {
-    if (currentPath === "/") {
-      const savedPosition = getSavedHomepageScroll();
-      if (savedPosition !== null) {
-        // 1. Immediately set native window scroll before paint to prevent flashing at top
-        window.scrollTo(0, savedPosition);
+    if (currentPath !== "/") return;
 
-        // 2. Wait for child components and ScrollTrigger pin-spacers to establish full height
+    const pendingHash = pendingHashRef.current;
+    pendingHashRef.current = null;
+    const savedPosition = pendingHash ? null : getSavedHomepageScroll();
+
+    if (savedPosition !== null) {
+      // 1. Immediately set native window scroll before paint to prevent flashing at top
+      window.scrollTo(0, savedPosition);
+
+      // 2. Wait for child components and ScrollTrigger pin-spacers to establish full height
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+        const lenis = getLenis();
+        if (lenis) {
+          lenis.resize();
+          lenis.scrollTo(savedPosition, { immediate: true });
+        } else {
+          window.scrollTo(0, savedPosition);
+        }
+
+        // 3. Confirm exact positioning on following frame and invalidate stored state
         requestAnimationFrame(() => {
-          ScrollTrigger.refresh();
-          const lenis = getLenis();
           if (lenis) {
-            lenis.resize();
             lenis.scrollTo(savedPosition, { immediate: true });
-          } else {
-            window.scrollTo(0, savedPosition);
           }
+          clearSavedHomepageScroll();
+        });
+      });
+      return;
+    }
 
-          // 3. Confirm exact positioning on following frame and invalidate stored state
-          requestAnimationFrame(() => {
-            if (lenis) {
-              lenis.scrollTo(savedPosition, { immediate: true });
-            }
-            clearSavedHomepageScroll();
-          });
-        });
-      } else if (typeof window !== "undefined" && window.location.hash) {
-        const hash = window.location.hash;
-        requestAnimationFrame(() => {
-          ScrollTrigger.refresh();
-          setTimeout(() => {
-            scrollToTarget(hash, { duration: 1.15 });
-          }, 80);
-        });
-      }
+    const hash = pendingHash ?? window.location.hash;
+    if (hash) {
+      // Arriving from another route happens behind the veil, so land on the section directly
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+        getLenis()?.resize();
+        scrollToTarget(hash, pendingHash ? { immediate: true } : { duration: 1.15 });
+      });
     }
   }, [currentPath]);
 
-  // Dedicated Route: Flagship Marine House Monograph
-  if (currentPath === "/residences/the-marine-house") {
-    return <MarineHouseMonograph onBack={() => navigate("/")} />;
-  }
+  const goHome = useCallback(() => navigate("/"), [navigate]);
 
-  // Dedicated Route: Private Inquiry
-  if (currentPath === "/inquiry") {
-    return (
-      <PrivateInquiryPage
-        onBack={() => navigate("/")}
-        onNavigate={navigate}
-      />
-    );
-  }
-
-  // Dedicated Route: AURELIS Journal Article
-  if (currentPath.startsWith("/journal/")) {
+  let route: ReactNode;
+  if (currentPath === TOUR_PATH) {
+    route = <ResidenceTour onBack={() => navigate(MARINE_HOUSE_PATH)} />;
+  } else if (currentPath === MARINE_HOUSE_PATH) {
+    route = <MarineHouseMonograph onBack={goHome} onNavigate={navigate} />;
+  } else if (currentPath === "/inquiry") {
+    route = <PrivateInquiryPage onBack={goHome} onNavigate={navigate} />;
+  } else if (currentPath.startsWith("/journal/")) {
     const slug = currentPath.replace("/journal/", "").replace(/\/$/, "");
-    const article = journalArticlesMap[slug] ?? monolithicStoneArticle;
-    return (
-      <JournalArticlePage
-        article={article}
-        onNavigate={navigate}
-        onBack={() => navigate("/")}
-      />
+    route = (
+      <JournalArticleRoute key={slug} slug={slug} onNavigate={navigate} onBack={goHome} />
     );
+  } else if (currentPath === "/about") {
+    route = <AboutPage onNavigate={navigate} onBack={goHome} />;
+  } else {
+    route = <HomePage onNavigate={navigate} introComplete={introRevealed} />;
   }
 
-  // Dedicated Route: About Page
-  if (currentPath === "/about") {
-    return (
-      <AboutPage
-        onNavigate={navigate}
-        onBack={() => navigate("/")}
-      />
-    );
-  }
+  // Detail routes play their own entrance on mount, so hold them until the curtain lifts.
+  // The homepage mounts underneath straight away so its imagery loads behind the curtain.
+  const holdForIntro = !introRevealed && currentPath !== "/";
 
   return (
-    <div className="relative min-h-screen bg-[#0a0c0d] text-[#f6f6f4]">
-      {/* Global Navigation Layer */}
-      <Header
-        brand={heroContent.brand}
-        navItems={heroContent.navItems}
-        primaryAction={heroContent.primaryAction}
-        isScrolled={isScrolled}
-        onNavigate={navigate}
+    <>
+      <Suspense fallback={<div className="min-h-[100svh] bg-[#0a0c0d]" />}>
+        {holdForIntro ? null : route}
+      </Suspense>
+
+      {/* Route transition veil */}
+      <div
+        ref={veilRef}
+        aria-hidden="true"
+        className="pointer-events-none invisible fixed inset-0 z-[90] bg-[#0a0c0d] opacity-0"
       />
 
-      {/* Main Homepage Flow */}
-      <main>
-        {/* 1. Cinematic Homepage Hero */}
-        <Hero
-          data={heroContent}
-          containerRef={containerRef}
-          imageRef={imageRef}
-          contentRef={contentRef}
+      <Lightbox />
+      <Cursor />
+
+      {!introDone && (
+        <Preloader
+          onReveal={() => setIntroRevealed(true)}
+          onDone={() => setIntroDone(true)}
         />
-
-        {/* 2. Curated Portfolio Philosophy & Editorial Benchmark */}
-        <section
-          id="overview"
-          aria-label="AURELIS Curated Portfolio"
-          className="relative z-20 bg-[#0a0c0d] px-6 sm:px-8 md:px-12 lg:px-16 pt-16 md:pt-24 pb-24 md:pb-32"
-        >
-          <div className="mx-auto max-w-[1720px]">
-            {/* Top Row: Asymmetric Statement & Supporting Editorial Copy */}
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 lg:gap-16 border-b border-white/[0.07] pb-12 md:pb-16">
-              <div className="max-w-2xl">
-                <span className="text-[10px] md:text-[10.5px] font-medium tracking-[0.3em] uppercase text-[#dfd7c6]/85 block mb-3.5">
-                  AURELIS Curated Portfolio
-                </span>
-                <h2 className="text-3xl sm:text-4xl md:text-[2.65rem] lg:text-[3.15rem] font-light font-serif text-[#f6f6f4] tracking-[-0.015em] leading-[1.12]">
-                  Sanctuaries crafted in dialogue with nature and light.
-                </h2>
-              </div>
-              <p className="max-w-[34ch] text-[13.5px] md:text-[14.5px] text-[#c8c2b5]/80 font-light leading-[1.7] tracking-[0.01em] lg:text-right lg:self-end pb-1">
-                Every residence in our private portfolio represents a singular architectural statement, commissioned for collectors of rare living environments.
-              </p>
-            </div>
-
-            {/* Bottom Row: Editorial Specifications Index */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 pt-12 md:pt-16">
-              <div className="border-l border-white/[0.08] pl-6 md:pl-8 py-1">
-                <span className="text-[9.5px] tracking-[0.26em] text-[#c8c2b5]/50 uppercase font-sans block">
-                  Materiality
-                </span>
-                <span className="text-[13px] md:text-[13.5px] text-[#f6f6f4] tracking-[0.16em] uppercase font-sans font-medium mt-1.5 block">
-                  Roman Travertine & Basalt Monolith
-                </span>
-              </div>
-              <div className="border-l border-white/[0.08] pl-6 md:pl-8 py-1">
-                <span className="text-[9.5px] tracking-[0.26em] text-[#c8c2b5]/50 uppercase font-sans block">
-                  Site Area
-                </span>
-                <span className="text-[13px] md:text-[13.5px] text-[#f6f6f4] tracking-[0.16em] uppercase font-sans font-medium mt-1.5 block">
-                  24,000 SQ FT Coastal Parcel
-                </span>
-              </div>
-              <div className="border-l border-white/[0.08] pl-6 md:pl-8 py-1">
-                <span className="text-[9.5px] tracking-[0.26em] text-[#c8c2b5]/50 uppercase font-sans block">
-                  Status
-                </span>
-                <span className="text-[13px] md:text-[13.5px] text-[#f6f6f4] tracking-[0.16em] uppercase font-sans font-medium mt-1.5 block">
-                  Private Acquisition Only
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 3. Featured Residence Presentation: THE MARINE HOUSE */}
-        <FeaturedResidence
-          data={featuredResidenceContent}
-          onNavigate={navigate}
-        />
-
-        {/* 4. Signature 2D Cinematic Editorial Journey: The Marine House */}
-        <CinematicEditorialJourney />
-
-        {/* 5. The Collection: A Smaller Number of Exceptional Places */}
-        <CollectionSection onNavigate={navigate} />
-
-        {/* 6. 05 / The AURELIS Approach: Architectural Manifesto */}
-        <ApproachSection />
-
-        {/* 7. 06 / The Journal: The AURELIS Notebook */}
-        <JournalSection onNavigate={navigate} />
-
-        {/* 8. 07 / Private Inquiry: The Final Monograph Invitation */}
-        <PrivateInquirySection onNavigate={navigate} />
-      </main>
-
-      {/* 9. 08 / Footer: Architectural Monograph Closing */}
-      <FooterSection onNavigate={navigate} />
-    </div>
+      )}
+    </>
   );
 }
 

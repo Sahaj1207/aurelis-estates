@@ -20,7 +20,7 @@ export const CinematicCopy: React.FC<CinematicCopyProps> = ({
           </span>
         </div>
 
-        <h3 className="cinematic-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light font-serif text-[#f6f6f4] tracking-[-0.015em] leading-[0.98]">
+        <h3 className="cinematic-headline display-xl font-light font-serif text-[#f6f6f4] tracking-[-0.015em] leading-[0.98]">
           {frame.displayLines.map((line) => (
             <span key={line} className="block">
               {line}
@@ -41,7 +41,7 @@ export const CinematicCopy: React.FC<CinematicCopyProps> = ({
       </div>
 
       {/* Main Display Headline with deliberate intentional line breaks */}
-      <h3 className="cinematic-headline text-3xl sm:text-4xl md:text-5xl lg:text-[3.75rem] xl:text-[4.5rem] font-light font-serif text-[#f6f6f4] tracking-[-0.015em] leading-[0.98] mb-3">
+      <h3 className="cinematic-headline display-md font-light font-serif text-[#f6f6f4] tracking-[-0.015em] leading-[0.98] mb-3">
         {frame.displayLines.map((line) => (
           <span key={line} className="block">
             {line}

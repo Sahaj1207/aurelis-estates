@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { X, ArrowUpRight } from "@phosphor-icons/react";
 import type { NavItem } from "../data/estateContent";
-import { scrollToTarget, getLenis } from "../services/smoothScroll";
+import { scrollToTarget, lockScroll, unlockScroll } from "../services/smoothScroll";
 
 interface NavigationProps {
   items: NavItem[];
@@ -106,18 +106,9 @@ export const Navigation: React.FC<NavigationProps> = ({
 
   // Lock body scroll and pause Lenis when mobile overlay is active
   useEffect(() => {
-    const lenis = getLenis();
-    if (isOpen) {
-      if (lenis) lenis.stop();
-      document.body.style.overflow = "hidden";
-    } else {
-      if (lenis) lenis.start();
-      document.body.style.overflow = "";
-    }
-    return () => {
-      if (lenis) lenis.start();
-      document.body.style.overflow = "";
-    };
+    if (!isOpen) return;
+    lockScroll();
+    return () => unlockScroll();
   }, [isOpen]);
 
   // Animate menu open sequence with canonical GSAP
@@ -256,11 +247,6 @@ export const Navigation: React.FC<NavigationProps> = ({
   ) => {
     e.preventDefault();
     animateClose(() => {
-      // Ensure Lenis and body scroll are restored before initiating smooth scroll
-      document.body.style.overflow = "";
-      const lenis = getLenis();
-      if (lenis) lenis.start();
-
       if (href.startsWith("#")) {
         if (window.location.pathname !== "/") {
           if (onNavigate) {
@@ -316,7 +302,7 @@ export const Navigation: React.FC<NavigationProps> = ({
           role="dialog"
           aria-modal="true"
           aria-label="Site Navigation"
-          className="fixed inset-0 z-50 flex flex-col justify-between bg-[#0a0c0d] px-6 sm:px-8 py-8 md:hidden overflow-y-auto"
+          className="fixed inset-0 z-50 flex flex-col justify-between bg-[#0a0c0d] px-6 sm:px-8 pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))] md:hidden overflow-y-auto overscroll-contain"
         >
           {/* Top Bar: Wordmark and Circular Close Control */}
           <div
@@ -355,10 +341,10 @@ export const Navigation: React.FC<NavigationProps> = ({
                   <a
                     href={item.href}
                     onClick={(e) => handleMobileNavClick(e, item.href)}
-                    className="group flex items-baseline justify-between py-5 sm:py-6 text-3xl sm:text-4xl font-light font-serif text-[#f6f6f4] tracking-[-0.01em] transition-colors duration-300 hover:text-[#dfd7c6]"
+                    className="group flex items-baseline justify-between py-5 sm:py-6 text-[2.5rem] leading-none sm:text-5xl font-light font-serif text-[#f6f6f4] tracking-[-0.01em] transition-colors duration-300 hover:text-[#dfd7c6]"
                   >
                     <span className="nav-link-label transition-transform duration-300 group-hover:translate-x-1.5">
-                      {item.label.toUpperCase()}
+                      {item.label}
                     </span>
                     <span className="nav-link-index font-sans text-[11px] font-normal tracking-[0.24em] text-[#c8c2b5]/50 group-hover:text-[#dfd7c6] transition-colors duration-300">
                       0{index + 1}

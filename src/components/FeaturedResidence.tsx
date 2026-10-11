@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight } from "@phosphor-icons/react";
 import type { FeaturedResidenceData } from "../data/estateContent";
+import { Img } from "./Img";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -131,7 +132,7 @@ export const FeaturedResidence: React.FC<FeaturedResidenceProps> = ({
       id="residences"
       ref={sectionRef}
       aria-label={`${data.property} Featured Residence Presentation`}
-      className="relative z-20 bg-[#0a0c0d] px-6 sm:px-8 md:px-12 lg:px-16 pt-24 md:pt-36 lg:pt-44 pb-28 md:pb-40 border-t border-white/[0.06]"
+      className="relative z-20 bg-[#0a0c0d] px-6 sm:px-8 md:px-12 lg:px-16 pt-20 md:pt-32 lg:pt-36 pb-24 md:pb-36 border-t border-white/[0.06]"
     >
       <div className="mx-auto max-w-[1720px]">
         {/* Section Marker: Establishing editorial sequencing */}
@@ -147,18 +148,18 @@ export const FeaturedResidence: React.FC<FeaturedResidenceProps> = ({
         </div>
 
         {/* Asymmetrical Editorial Composition */}
-        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-10 lg:gap-14 xl:gap-20 items-start">
+        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-10 lg:gap-14 xl:gap-20 items-center">
           {/* 1. Large Architectural Photograph Plate (Desktop: 7-8 cols / Mobile: order-1) */}
           <div className="order-1 lg:order-2 lg:col-span-7 xl:col-span-8 w-full">
             <div
               ref={imageWrapRef}
               className="group relative w-full overflow-hidden bg-[#121517] aspect-[4/3] sm:aspect-[16/10] lg:aspect-[16/10] border border-white/[0.08]"
             >
-              <img
+              <Img
                 ref={imageRef}
                 src={data.image.src}
                 alt={data.image.alt}
-                className="h-full w-full object-cover object-[center_55%] will-change-transform transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                className="h-full w-full object-cover object-center will-change-transform transition-transform duration-700 ease-out group-hover:scale-[1.02]"
               />
 
               {/* Ultra-fine analog film grain without dark overlays */}
@@ -182,7 +183,7 @@ export const FeaturedResidence: React.FC<FeaturedResidenceProps> = ({
               {/* Property Title (Mobile: order-1 / Desktop: order-2) */}
               <h3
                 ref={titleRef}
-                className="order-1 lg:order-2 text-4xl sm:text-5xl md:text-6xl lg:text-[3.75rem] xl:text-[4.25rem] font-light font-serif text-[#f6f6f4] tracking-[-0.015em] leading-[0.98] mb-4 lg:mb-6"
+                className="order-1 lg:order-2 display-md font-light font-serif text-[#f6f6f4] tracking-[-0.015em] leading-[0.98] mb-4 lg:mb-6"
               >
                 {data.property}
               </h3>
@@ -225,7 +226,7 @@ export const FeaturedResidence: React.FC<FeaturedResidenceProps> = ({
               </div>
 
               {/* Primary Action CTA (Mobile: order-5 / Desktop: order-5) */}
-              <div ref={ctaRef} className="order-5">
+              <div ref={ctaRef} className="order-5 flex flex-wrap items-center gap-x-7 gap-y-4">
                 <a
                   href={data.cta.href}
                   onClick={handleCtaClick}
@@ -237,6 +238,20 @@ export const FeaturedResidence: React.FC<FeaturedResidenceProps> = ({
                     weight="regular"
                     className="relative z-10 transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                   />
+                </a>
+                <a
+                  href="/residences/the-marine-house/tour"
+                  onClick={(e) => {
+                    if (onNavigate) {
+                      e.preventDefault();
+                      onNavigate("/residences/the-marine-house/tour");
+                    }
+                  }}
+                  className="group inline-flex items-center gap-2.5 py-2 text-[11px] font-medium tracking-[0.24em] uppercase text-[#dfd7c6] transition-colors duration-300 hover:text-[#f6f6f4]"
+                >
+                  <span className="border-b border-[#dfd7c6]/40 pb-1 transition-colors duration-300 group-hover:border-[#f6f6f4]">
+                    Walk the residence in 3D
+                  </span>
                 </a>
               </div>
             </div>

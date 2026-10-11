@@ -1,5 +1,6 @@
 import React from "react";
 import { approachContent } from "./approachData";
+import { Img } from "../Img";
 
 export const ApproachIntro: React.FC = () => {
   const { eyebrow, manifesto, supportingCopy, manifestoImage } = approachContent;
@@ -17,7 +18,7 @@ export const ApproachIntro: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start pb-10 md:pb-14 border-b border-white/[0.07]">
         {/* Left Manifesto Column */}
         <div className="lg:col-span-7 xl:col-span-7">
-          <h2 className="approach-manifesto text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-[5rem] font-light font-serif text-[#f6f6f4] tracking-[-0.02em] leading-[0.98]">
+          <h2 className="approach-manifesto display-lg font-light font-serif text-[#f6f6f4] tracking-[-0.02em] leading-[0.98]">
             <span className="block overflow-hidden">
               <span className="inline-block">{manifesto.line1}</span>
             </span>
@@ -42,11 +43,10 @@ export const ApproachIntro: React.FC = () => {
 
           {/* Restrained Architectural Image Fragment */}
           <div className="approach-intro-image-wrapper relative overflow-hidden bg-[#121517] aspect-[16/10] sm:aspect-[21/11] border border-white/[0.08] max-w-sm sm:max-w-md group">
-            <img
+            <Img
               src={manifestoImage.src}
               alt={manifestoImage.alt}
               className="approach-intro-image h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.025]"
-              loading="lazy"
             />
             <div className="absolute bottom-3 left-3 bg-[#0a0c0d]/85 backdrop-blur-md px-3 py-1.5 border border-white/[0.08] text-[8.5px] tracking-[0.22em] uppercase text-[#c8c2b5]/80 pointer-events-none">
               {manifestoImage.caption}
